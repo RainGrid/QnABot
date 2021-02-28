@@ -1,0 +1,10 @@
+name: English
+help: |
+  ✏️ Create and process questionnaires
+  🔔 Receive notifications
+  📈 Get statistics
+  📥 Import questionnaires from Google Forms
+  🌐 Export answers to Google Tables, csv
+  🏳️ Multilanguage.
+language: Please, select the language.
+language_selected: <b>Bot</b> now speaks English.
