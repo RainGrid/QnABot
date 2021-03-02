@@ -1,6 +1,4 @@
-import { Message } from 'telegraf/typings/telegram-types';
-import { languageKeyboard } from '../../commands/language';
-import { TelegrafContext } from '../../types/telegraf';
+import { TelegrafContext } from '../../types';
 
 export const actionEnterQuestionnaresScene = async (
   ctx: TelegrafContext,
@@ -26,6 +24,6 @@ export const actionEnterAuthorScene = async (
 export const actionSendLanguageKeyboard = async (
   ctx: TelegrafContext,
 ): Promise<void> => {
-  ctx.reply(ctx.i18n.t('language_choose'), languageKeyboard());
+  ctx.scene.enter('language');
   return;
 };

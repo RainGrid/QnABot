@@ -1,6 +1,6 @@
 // Dependencies
 import { getModelForClass, post, prop, Ref } from '@typegoose/typegoose';
-import { Schema } from 'mongoose';
+import { Schema, Types } from 'mongoose';
 import { AnswerModel } from './Answer';
 import { Questionnare } from './Questionnare';
 
@@ -12,7 +12,7 @@ export enum QuestionType {
 }
 
 async function deleteDependencies(question: Question): Promise<void> {
-  await AnswerModel.deleteMany({ question: question._id.toString() });
+  await AnswerModel.deleteMany({ question });
 }
 
 @post<Question>('findOneAndRemove', async (question) => {
@@ -33,16 +33,22 @@ async function deleteDependencies(question: Question): Promise<void> {
   }
 })
 export class Question {
-  _id: Schema.Types.ObjectId;
+  _id: Types.ObjectId;
 
-  @prop({ required: true, index: true, unique: true })
+  @prop({ required: true })
   name!: string;
+
+  @prop({})
+  description?: string;
 
   @prop({ required: true, default: QuestionType.Short })
   type!: QuestionType;
 
   @prop({ type: Schema.Types.String })
   options?: string[];
+
+  @prop({ type: Schema.Types.String })
+  labels?: string[];
 
   @prop({ required: true, default: false })
   isRequired!: boolean;

@@ -1,5 +1,5 @@
 import { Telegraf } from 'telegraf';
-import { TelegrafContext } from '../types/telegraf';
+import { TelegrafContext } from '../types';
 
 export async function checkTime(bot: Telegraf<TelegrafContext>) {
   bot.use(async (ctx, next) => {

@@ -1,6 +1,6 @@
 // Dependencies
 import { Telegraf } from 'telegraf';
-import { TelegrafContext } from '../types/telegraf';
+import { TelegrafContext } from '../types';
 
 export function setupHelp(bot: Telegraf<TelegrafContext>) {
   bot.command(['help', 'start'], (ctx) => {

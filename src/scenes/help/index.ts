@@ -1,5 +1,5 @@
 import { Scenes } from 'telegraf';
-import { TelegrafContext } from '../../types/telegraf';
+import { TelegrafContext } from '../../types';
 import { sendKeyboard } from './helpers';
 const { match } = require('telegraf-i18n');
 

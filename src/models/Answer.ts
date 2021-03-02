@@ -1,10 +1,12 @@
 // Dependencies
 import { getModelForClass, prop, Ref } from '@typegoose/typegoose';
-import { Schema } from 'mongoose';
+import { Schema, Types } from 'mongoose';
 import { Question } from './Question';
 import { User } from './User';
 
 export class Answer {
+  _id: Types.ObjectId;
+
   @prop({ required: true })
   answer!: string;
 
@@ -15,7 +17,7 @@ export class Answer {
   question!: Ref<Question>;
 }
 
-// Get Question model
+// Get Answer model
 export const AnswerModel = getModelForClass(Answer, {
   schemaOptions: { timestamps: true },
 });

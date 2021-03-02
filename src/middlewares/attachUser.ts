@@ -1,7 +1,7 @@
 // Dependencies
 import { Telegraf } from 'telegraf';
 import { findUser } from '../models';
-import { TelegrafContext } from '../types/telegraf';
+import { TelegrafContext } from '../types';
 
 export async function attachUser(bot: Telegraf<TelegrafContext>) {
   bot.use(async (ctx, next) => {

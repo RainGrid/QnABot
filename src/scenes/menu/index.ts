@@ -1,5 +1,5 @@
 import { Scenes } from 'telegraf';
-import { TelegrafContext } from '../../types/telegraf';
+import { TelegrafContext } from '../../types';
 import {
   actionEnterAuthorScene,
   actionEnterHelpScene,

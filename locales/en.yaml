@@ -1,7 +1,7 @@
 name: English
 help_message: Please write your question to @raingrid
 language: Language
-language_choose: Please, select the language
+language_select: Please, select the language
 language_selected: <b>Bot</b> now speaks English.
 menu: Menu
 questionnares: Questionnares
@@ -9,3 +9,8 @@ author: About the author
 help: Help
 back: Back
 about_author: Volokh Y @raingrid
+qimport: Import Google Form
+qimport_link: Enter the Form url
+qimport_link_wrong: Wrong url, please check tha the form in view mode
+qimport_error: Import error
+qimport_success: Import is successfully finished

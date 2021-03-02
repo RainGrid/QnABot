@@ -1,7 +1,7 @@
 name: Русский
 help_message: Вы можете задать свой вопрос, написав @raingrid
 language: Язык
-language_choose: Пожалуйста, выберите язык
+language_select: Пожалуйста, выберите язык
 language_selected: <b>Бот</b> теперь говорит по-русски.
 menu: Меню
 questionnares: Вопросники
@@ -9,3 +9,8 @@ author: Об авторе
 help: Помощь
 back: Назад
 about_author: Волох Ярослав @raingrid
+qimport: Импорт Гугл Формы
+qimport_link: Введите ссылку на Гугл Форму
+qimport_link_wrong: Неверная ссылка, убедитесь, что форма в режиме просмотра
+qimport_error: В процессе импорта произошла ошибка
+qimport_success: Импорт завершен успешно

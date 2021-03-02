@@ -1,5 +1,5 @@
 import { Telegraf } from 'telegraf';
-import { TelegrafContext } from '../types/telegraf';
+import { TelegrafContext } from '../types';
 
 export function setupError(bot: Telegraf<TelegrafContext>): void {
   bot.catch(async (err: Error) => {

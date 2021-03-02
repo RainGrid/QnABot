@@ -1,10 +1,11 @@
 // Dependencies
-import { getModelForClass, post, prop } from '@typegoose/typegoose';
-import { Schema } from 'mongoose';
+import { getModelForClass, post, prop, Ref } from '@typegoose/typegoose';
+import { Schema, Types } from 'mongoose';
+import { User } from '.';
 import { QuestionModel } from './Question';
 
 async function deleteDependencies(questionnare: Questionnare): Promise<void> {
-  await QuestionModel.deleteMany({ questionnare: questionnare._id.toString() });
+  await QuestionModel.deleteMany({ questionnare });
 }
 @post<Questionnare>('findOneAndRemove', async (questionnare) => {
   await deleteDependencies(questionnare);
@@ -24,10 +25,13 @@ async function deleteDependencies(questionnare: Questionnare): Promise<void> {
   }
 })
 export class Questionnare {
-  _id: Schema.Types.ObjectId;
+  _id: Types.ObjectId;
 
   @prop({ required: true })
   name!: string;
+
+  @prop({ required: true, type: Schema.Types.ObjectId })
+  user!: Ref<User>;
 
   @prop({})
   description?: string;

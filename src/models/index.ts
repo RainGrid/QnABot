@@ -10,7 +10,7 @@ mongoose.connect(process.env.MONGO, {
 mongoose.set('useCreateIndex', true);
 
 // Export models
-export * from './User';
-export * from './Questionnare';
-export * from './Question';
 export * from './Answer';
+export * from './Question';
+export * from './Questionnare';
+export * from './User';

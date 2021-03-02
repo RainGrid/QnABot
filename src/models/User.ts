@@ -1,6 +1,6 @@
 // Dependencies
 import { getModelForClass, post, prop } from '@typegoose/typegoose';
-import { Schema } from 'mongoose';
+import { Types } from 'mongoose';
 import { QuestionnareModel } from './Questionnare';
 
 async function deleteDependencies(user: User): Promise<void> {
@@ -25,7 +25,7 @@ async function deleteDependencies(user: User): Promise<void> {
   }
 })
 export class User {
-  _id: Schema.Types.ObjectId;
+  _id: Types.ObjectId;
 
   @prop({ required: true, index: true, unique: true })
   id!: number;

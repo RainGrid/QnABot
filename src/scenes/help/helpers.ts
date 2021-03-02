@@ -1,5 +1,5 @@
 import { Markup } from 'telegraf';
-import { TelegrafContext } from '../../types/telegraf';
+import { TelegrafContext } from '../../types';
 import { getKeyboardRows } from '../../utils';
 
 type Button = {

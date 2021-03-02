@@ -1,19 +1,22 @@
+import { enterScene } from '../../utils';
+import { enterMenu } from '../../utils';
 import { Scenes } from 'telegraf';
-import { TelegrafContext } from '../../types/telegraf';
-import {
-  actionEnterAuthorScene,
-  actionEnterHelpScene,
-  actionEnterQuestionnaresScene,
-} from './actions';
+import { TelegrafContext } from '../../types';
 import { Button, sendMainKeyboard } from './helpers';
+import { actionImport, actionProcessPayload } from './actions';
 const { match } = require('telegraf-i18n');
 
 const scene = new Scenes.BaseScene<TelegrafContext>('questionnares');
 
 const buttons: Button[] = [
-  { cmd: 'questionnares_my', cb: actionEnterQuestionnaresScene },
-  { cmd: 'help', cb: actionEnterHelpScene },
-  { cmd: 'author', cb: actionEnterAuthorScene },
+  {
+    cmd: 'qimport',
+    cb: actionImport,
+  },
+  {
+    cmd: 'back',
+    cb: enterMenu,
+  },
 ];
 
 scene.enter(async (ctx: TelegrafContext) => {
@@ -23,5 +26,7 @@ scene.enter(async (ctx: TelegrafContext) => {
 buttons.map((button) => {
   scene.hears(match(button.cmd), button.cb);
 });
+
+scene.on('text', actionProcessPayload);
 
 export default scene;

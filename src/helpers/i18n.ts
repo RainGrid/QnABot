@@ -1,7 +1,7 @@
 // Dependencies
 import { Telegraf } from 'telegraf';
 import I18N from 'telegraf-i18n';
-import { TelegrafContext } from '../types/telegraf';
+import { TelegrafContext } from '../types';
 const dirtyI18N = require('telegraf-i18n');
 
 const i18n: I18N = new dirtyI18N({
