@@ -1,7 +1,7 @@
 // Dependencies
 import { getModelForClass, post, prop, Ref } from '@typegoose/typegoose';
 import { Schema } from 'mongoose';
-import { Answer, AnswerModel } from './Answer';
+import { AnswerModel } from './Answer';
 import { Questionnare } from './Questionnare';
 
 export enum QuestionType {
@@ -41,7 +41,7 @@ export class Question {
   @prop({ required: true, default: QuestionType.Short })
   type!: QuestionType;
 
-  @prop()
+  @prop({ type: Schema.Types.String })
   options?: string[];
 
   @prop({ required: true, default: false })
@@ -50,7 +50,7 @@ export class Question {
   @prop({ required: true, default: 0 })
   sortOrder!: number;
 
-  @prop({ required: true })
+  @prop({ required: true, type: Schema.Types.ObjectId })
   questionnare!: Ref<Questionnare>;
 }
 

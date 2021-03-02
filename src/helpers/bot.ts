@@ -1,7 +1,8 @@
 // Dependencies
-import { Context, Telegraf } from 'telegraf';
+import { Telegraf } from 'telegraf';
+import { TelegrafContext } from '../types/telegraf';
 
-export const bot = new Telegraf<Context>(process.env.TOKEN);
+export const bot = new Telegraf<TelegrafContext>(process.env.TOKEN);
 
 bot.telegram.getMe().then((botInfo) => {
   const anybot = bot as any;

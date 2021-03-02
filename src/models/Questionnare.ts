@@ -26,7 +26,7 @@ async function deleteDependencies(questionnare: Questionnare): Promise<void> {
 export class Questionnare {
   _id: Schema.Types.ObjectId;
 
-  @prop({ required: true, index: true, unique: true })
+  @prop({ required: true })
   name!: string;
 
   @prop({})

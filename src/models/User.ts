@@ -35,20 +35,17 @@ export class User {
 }
 
 // Get User model
-const UserModel = getModelForClass(User, {
+export const UserModel = getModelForClass(User, {
   schemaOptions: { timestamps: true },
 });
 
 // Get or create user
-export async function findUser(id: number) {
+export async function findUser(id: number): Promise<User> {
   let user = await UserModel.findOne({ id });
   if (!user) {
-    try {
-      await new UserModel({ id }).save();
-    } catch (err) {
-    } finally {
-      await UserModel.findOne({ id });
-    }
+    const newUser = new UserModel({ id });
+    await newUser.save();
+    return newUser;
   }
   return user;
 }

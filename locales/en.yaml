@@ -1,10 +1,11 @@
 name: English
-help: |
-  ✏️ Create and process questionnaires
-  🔔 Receive notifications
-  📈 Get statistics
-  📥 Import questionnaires from Google Forms
-  🌐 Export answers to Google Tables, csv
-  🏳️ Multilanguage.
-language: Please, select the language.
+help_message: Please write your question to @raingrid
+language: Language
+language_choose: Please, select the language
 language_selected: <b>Bot</b> now speaks English.
+menu: Menu
+questionnares: Questionnares
+author: About the author
+help: Help
+back: Back
+about_author: Volokh Y @raingrid
