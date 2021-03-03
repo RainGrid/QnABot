@@ -5,12 +5,23 @@ language_select: Пожалуйста, выберите язык
 language_selected: <b>Бот</b> теперь говорит по-русски.
 menu: Меню
 questionnares: Вопросники
+questions: Вопросы
 author: Об авторе
 help: Помощь
 back: Назад
+delete: Удалить
 about_author: Волох Ярослав @raingrid
+
 qimport: Импорт Гугл Формы
 qimport_link: Введите ссылку на Гугл Форму
 qimport_link_wrong: Неверная ссылка, убедитесь, что форма в режиме просмотра
 qimport_error: В процессе импорта произошла ошибка
 qimport_success: Импорт завершен успешно
+
+qcreate: Создать
+
+qnew_name: Введите название
+qnew_descr: Введите описание
+qnew_success: Вопросник успешно создан
+
+qenabled: Активен

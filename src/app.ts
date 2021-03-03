@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv';
 dotenv.config({ path: `${__dirname}/../.env` });
+
 import { MongoClient } from 'mongodb';
 import { session } from 'telegraf-session-mongodb';
 import { setupHelp } from './commands/help';
@@ -11,7 +12,7 @@ import { attachUser } from './middlewares/attachUser';
 import { checkTime } from './middlewares/checkTime';
 
 // Start bot
-MongoClient.connect(process.env.MONGO, {
+MongoClient.connect(process.env.MONGO!, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then((client) => {

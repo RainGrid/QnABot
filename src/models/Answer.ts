@@ -5,7 +5,7 @@ import { Question } from './Question';
 import { User } from './User';
 
 export class Answer {
-  _id: Types.ObjectId;
+  _id?: Types.ObjectId;
 
   @prop({ required: true })
   answer!: string;

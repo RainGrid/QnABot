@@ -1,40 +1,49 @@
 import { readdirSync, readFileSync } from 'fs';
-import { safeLoad } from 'js-yaml';
-import { Markup } from 'telegraf';
+import { load } from 'js-yaml';
+import { Markup as m } from 'telegraf';
 import { TelegrafContext } from '../../types';
 
 export const sendKeyboard = async (ctx: TelegrafContext): Promise<void> => {
   await ctx.reply(ctx.i18n.t('language_select'), languageKeyboard());
 };
 
-export function localesFiles() {
+export function localesFiles(): string[] {
   return readdirSync(`${__dirname}/../../../locales`);
 }
 
-export function languageKeyboard() {
+export function languageKeyboard(): any {
   const locales = localesFiles();
-  const result = [];
+  const result: any[] = [];
   locales.forEach((locale, index) => {
     const localeCode = locale.split('.')[0];
-    const localeName = safeLoad(
+    const localeName = load(
       readFileSync(`${__dirname}/../../../locales/${locale}`, 'utf8'),
-    ).name;
-    if (index % 2 == 0) {
-      if (index === 0) {
-        result.push([Markup.button.callback(localeName, localeCode)]);
+    );
+
+    if (
+      localeName &&
+      typeof localeName === 'object' &&
+      (localeName as any).name
+    ) {
+      if (index % 2 == 0) {
+        if (index === 0) {
+          result.push([
+            m.button.callback((localeName as any).name, localeCode),
+          ]);
+        } else {
+          result[result.length - 1].push(
+            m.button.callback((localeName as any).name, localeCode),
+          );
+        }
       } else {
         result[result.length - 1].push(
-          Markup.button.callback(localeName, localeCode),
+          m.button.callback((localeName as any).name, localeCode),
         );
-      }
-    } else {
-      result[result.length - 1].push(
-        Markup.button.callback(localeName, localeCode),
-      );
-      if (index < locales.length - 1) {
-        result.push([]);
+        if (index < locales.length - 1) {
+          result.push([]);
+        }
       }
     }
   });
-  return Markup.inlineKeyboard(result);
+  return m.inlineKeyboard(result);
 }

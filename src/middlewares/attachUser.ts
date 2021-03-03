@@ -3,10 +3,12 @@ import { Telegraf } from 'telegraf';
 import { findUser } from '../models';
 import { TelegrafContext } from '../types';
 
-export async function attachUser(bot: Telegraf<TelegrafContext>) {
+export function attachUser(bot: Telegraf<TelegrafContext>): void {
   bot.use(async (ctx, next) => {
-    const dbuser = await findUser(ctx.from.id);
-    ctx.dbuser = dbuser;
+    if (ctx.from) {
+      const dbuser = await findUser(ctx.from.id);
+      ctx.dbuser = dbuser;
+    }
     next();
   });
 }

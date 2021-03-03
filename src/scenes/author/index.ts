@@ -1,6 +1,7 @@
 import { Scenes } from 'telegraf';
 import { TelegrafContext } from '../../types';
 import { sendKeyboard } from './helpers';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { match } = require('telegraf-i18n');
 
 const scene = new Scenes.BaseScene<TelegrafContext>('author');

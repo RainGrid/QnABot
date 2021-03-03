@@ -28,12 +28,12 @@ async function deleteDependencies(question: Question): Promise<void> {
   await deleteDependencies(question);
 })
 @post<Question>('deleteMany', async (questions) => {
-  for (const q of questions) {
-    await deleteDependencies(q);
-  }
+  // for (const q of questions) {
+  //   await deleteDependencies(q);
+  // }
 })
 export class Question {
-  _id: Types.ObjectId;
+  _id?: Types.ObjectId;
 
   @prop({ required: true })
   name!: string;

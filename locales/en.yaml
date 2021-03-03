@@ -5,12 +5,23 @@ language_select: Please, select the language
 language_selected: <b>Bot</b> now speaks English.
 menu: Menu
 questionnares: Questionnares
+questions: Questions
 author: About the author
 help: Help
 back: Back
+delete: Delete
 about_author: Volokh Y @raingrid
+
 qimport: Import Google Form
 qimport_link: Enter the Form url
 qimport_link_wrong: Wrong url, please check tha the form in view mode
 qimport_error: Import error
 qimport_success: Import is successfully finished
+
+qcreate: Create new
+
+qnew_name: Enter the name
+qnew_descr: Enter the description
+qnew_success: Questionnare is successfully created
+
+qenabled: Active

@@ -1,9 +1,9 @@
 import { Telegraf } from 'telegraf';
 import { TelegrafContext } from '../types';
 
-export async function checkTime(bot: Telegraf<TelegrafContext>) {
+export function checkTime(bot: Telegraf<TelegrafContext>): void {
   bot.use(async (ctx, next) => {
-    if (ctx.updateType === 'message') {
+    if (ctx.updateType === 'message' && ctx.message && ctx.from && ctx.chat) {
       if (new Date().getTime() / 1000 - ctx.message.date < 5 * 60) {
         next();
       } else {

@@ -19,10 +19,20 @@ export const getKeyboardRows = <
   return rows;
 };
 
-export const enterMenu = async (ctx: TelegrafContext) => {
+export const enterMenu = async (ctx: TelegrafContext): Promise<void> => {
   ctx.scene.enter('menu');
 };
 
-export const enterScene = (scene) => async (ctx: TelegrafContext) => {
+export const enterScene = (scene: string) => async (
+  ctx: TelegrafContext,
+): Promise<void> => {
   ctx.scene.enter(scene);
+};
+
+export const defaultSceneData = async (
+  ctx: TelegrafContext,
+  next: () => Promise<void>,
+): Promise<void> => {
+  ctx.scene.session.data ??= {};
+  next();
 };

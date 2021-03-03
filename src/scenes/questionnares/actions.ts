@@ -4,7 +4,7 @@ import { QuestionModel, QuestionnareModel, QuestionType } from '../../models';
 import { TelegrafContext } from '../../types';
 
 export const actionImport = async (ctx: TelegrafContext): Promise<void> => {
-  ctx.scene.state = { step: 'gf_link' };
+  ctx.scene.session.data = { step: 'gf_link' };
   await ctx.reply(ctx.i18n.t('qimport_link'));
 };
 
@@ -29,8 +29,8 @@ function googleTypeToQuestionType(
 export const actionProcessPayload = async (
   ctx: TelegrafContext,
 ): Promise<void> => {
-  if ('text' in ctx.message) {
-    if (ctx.scene.state['step'] === 'gf_link') {
+  if (ctx.message && 'text' in ctx.message) {
+    if (ctx.scene.session.data?.step === 'gf_link') {
       const url = ctx.message.text;
       if (
         /https:\/\/docs\.google\.com\/forms\/d\/e\/[a-zA-Z0-9_=?-]+\/viewform/.test(
@@ -67,7 +67,8 @@ export const actionProcessPayload = async (
             const fieldRows = field[4];
             for (const row of fieldRows) {
               const qRequired = row[2];
-              const qOptions = row[1]?.map((el) => el[0] || 'any') || undefined;
+              const qOptions =
+                row[1]?.map((el: string[]) => el[0] || 'any') || undefined;
               const qLabels = row[3] || undefined;
               const question = new QuestionModel({
                 name: qName,
@@ -83,9 +84,10 @@ export const actionProcessPayload = async (
             }
           }
           await q.save();
-          ctx.scene.state = {};
           await ctx.reply(ctx.i18n.t('qimport_success'));
+          ctx.scene.reenter();
         } catch (error) {
+          console.log(error);
           await ctx.reply(ctx.i18n.t('qimport_error'));
         }
       } else {

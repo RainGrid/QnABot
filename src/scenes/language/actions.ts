@@ -1,10 +1,12 @@
 // Dependencies
 import { TelegrafContext } from '../../types';
 
-export async function handleLanguageSelect(ctx: TelegrafContext) {
+export async function handleLanguageSelect(
+  ctx: TelegrafContext,
+): Promise<void> {
   await ctx.answerCbQuery();
 
-  if ('data' in ctx.callbackQuery) {
+  if (ctx.callbackQuery?.message && 'data' in ctx.callbackQuery) {
     let user = ctx.dbuser;
     user.language = ctx.callbackQuery.data;
     user = await (user as any).save();

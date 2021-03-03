@@ -4,7 +4,7 @@ import { Types } from 'mongoose';
 import { QuestionnareModel } from './Questionnare';
 
 async function deleteDependencies(user: User): Promise<void> {
-  await QuestionnareModel.deleteMany({ user: user._id.toString() });
+  await QuestionnareModel.deleteMany({ user });
 }
 
 @post<User>('findOneAndRemove', async (user) => {
@@ -25,7 +25,7 @@ async function deleteDependencies(user: User): Promise<void> {
   }
 })
 export class User {
-  _id: Types.ObjectId;
+  _id?: Types.ObjectId;
 
   @prop({ required: true, index: true, unique: true })
   id!: number;
@@ -41,7 +41,7 @@ export const UserModel = getModelForClass(User, {
 
 // Get or create user
 export async function findUser(id: number): Promise<User> {
-  let user = await UserModel.findOne({ id });
+  const user = await UserModel.findOne({ id });
   if (!user) {
     const newUser = new UserModel({ id });
     await newUser.save();
