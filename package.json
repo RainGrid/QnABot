@@ -35,6 +35,7 @@
     "telegraf-i18n": "^6.6.0",
     "telegraf-inline-menu": "^6.2.0",
     "telegraf-session-mongodb": "^2.0.1",
+    "telegraf-stateless-question": "^2.0.0",
     "typescript": "^4.2.2"
   }
 }

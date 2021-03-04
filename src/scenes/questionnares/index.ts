@@ -1,33 +1,20 @@
 import { Scenes } from 'telegraf';
 import { TelegrafContext } from '../../types';
-import { enterMenu, enterScene } from '../../utils';
-import { actionImport, actionProcessPayload } from './actions';
-import { Button, sendMainKeyboard } from './helpers';
-import { menuMiddleware } from './menu';
+import { actionProcessPayload } from './actions';
+import { buttons, sendMainKeyboard } from './helpers';
+import { menuMiddleware } from './menus';
+import { qDescr, qName } from './menus/qSingle';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { match } = require('telegraf-i18n');
 
 const scene = new Scenes.BaseScene<TelegrafContext>('questionnares');
 
-const buttons: Button[] = [
-  {
-    cmd: 'qcreate',
-    cb: enterScene('questionnare_new'),
-  },
-  {
-    cmd: 'qimport',
-    cb: actionImport,
-  },
-  {
-    cmd: 'back',
-    cb: enterMenu,
-  },
-];
-
 scene.use(menuMiddleware);
+scene.use(qName);
+scene.use(qDescr);
 
 scene.enter(async (ctx: TelegrafContext) => {
-  await sendMainKeyboard(ctx, buttons);
+  await sendMainKeyboard(ctx);
   menuMiddleware.replyToContext(ctx);
 });
 

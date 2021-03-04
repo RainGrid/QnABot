@@ -6,9 +6,11 @@ language_selected: <b>Bot</b> now speaks English.
 menu: Menu
 questionnares: Questionnares
 questions: Questions
+options: Options
 author: About the author
 help: Help
 back: Back
+mainmenu: Main menu
 delete: Delete
 about_author: Volokh Y @raingrid
 
@@ -25,3 +27,10 @@ qnew_descr: Enter the description
 qnew_success: Questionnare is successfully created
 
 qenabled: Active
+qstats: Statistics
+
+edit_name: Edit title
+edit_name_req: Enter the title
+
+edit_descr: Edit descrpition
+edit_descr_req: Enter the description

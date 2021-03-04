@@ -36,3 +36,12 @@ export const defaultSceneData = async (
   ctx.scene.session.data ??= {};
   next();
 };
+
+export const logCtx = async (
+  ctx: TelegrafContext,
+  next: () => Promise<void>,
+): Promise<void> => {
+  console.log(ctx);
+
+  next();
+};

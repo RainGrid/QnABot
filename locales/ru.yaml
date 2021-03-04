@@ -6,9 +6,11 @@ language_selected: <b>Бот</b> теперь говорит по-русски.
 menu: Меню
 questionnares: Вопросники
 questions: Вопросы
+options: Варианты ответа
 author: Об авторе
 help: Помощь
 back: Назад
+mainmenu: Главное меню
 delete: Удалить
 about_author: Волох Ярослав @raingrid
 
@@ -25,3 +27,10 @@ qnew_descr: Введите описание
 qnew_success: Вопросник успешно создан
 
 qenabled: Активен
+qstats: Статистика
+
+edit_name: Редактировать название
+edit_name_req: Введите название
+
+edit_descr: Редактировать описание
+edit_descr_req: Введите описание
