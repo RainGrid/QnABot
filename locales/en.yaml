@@ -20,6 +20,7 @@ qimport_link_wrong: Wrong url, please check tha the form in view mode
 qimport_error: Import error
 qimport_success: Import is successfully finished
 
+qtake: Take
 qcreate: Create new
 
 qnew_name: Enter the name
@@ -27,7 +28,14 @@ qnew_descr: Enter the description
 qnew_success: Questionnare is successfully created
 
 qenabled: Active
+
 qstats: Statistics
+qstats_count: ${finishedCount} users from ${commonCount} has finished their attempt per '${period}'
+day: Day
+week: Week
+month: Month
+year: Year
+alltime: All time
 
 edit_name: Edit title
 edit_name_req: Enter the title

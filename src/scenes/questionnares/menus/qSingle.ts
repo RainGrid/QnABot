@@ -8,6 +8,7 @@ import TelegrafStatelessQuestion from 'telegraf-stateless-question';
 import { TelegrafContext } from '../../../types';
 import { sendMainKeyboard } from '../helpers';
 import { getQuestionnare } from './helpers';
+import { qStatsMenu } from './qStats';
 import { quListMenu } from './quList';
 
 const qRegex = new RegExp('/q:(.*)/$');
@@ -70,11 +71,8 @@ qSingleMenu.toggle((ctx) => ctx.i18n.t('qenabled'), 'en', {
   },
 });
 
-qSingleMenu.interact((ctx) => ctx.i18n.t('qstats'), 'qStats', {
+qSingleMenu.submenu((ctx) => ctx.i18n.t('qstats'), 'st', qStatsMenu, {
   joinLastRow: true,
-  do: async () => {
-    return false;
-  },
 });
 
 qSingleMenu.interact((ctx) => ctx.i18n.t('delete'), 'del', {

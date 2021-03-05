@@ -14,3 +14,8 @@ export interface TelegrafContext extends Context {
   scene: Scenes.SceneContextScene<TelegrafContext, QNASceneSession>;
   readonly match: RegExpExecArray | undefined;
 }
+
+export type Button = {
+  cmd: string;
+  cb?: (ctx: TelegrafContext) => Promise<void>;
+};

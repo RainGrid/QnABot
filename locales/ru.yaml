@@ -20,6 +20,7 @@ qimport_link_wrong: Неверная ссылка, убедитесь, что ф
 qimport_error: В процессе импорта произошла ошибка
 qimport_success: Импорт завершен успешно
 
+qtake: Пройти
 qcreate: Создать
 
 qnew_name: Введите название
@@ -27,7 +28,14 @@ qnew_descr: Введите описание
 qnew_success: Вопросник успешно создан
 
 qenabled: Активен
+
 qstats: Статистика
+qstats_count: За период '${period}' ${finishedCount} пользователей из ${commonCount} завершили попытку
+day: День
+week: Неделя
+month: Месяц
+year: Год
+alltime: Все время
 
 edit_name: Редактировать название
 edit_name_req: Введите название

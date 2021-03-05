@@ -4,3 +4,4 @@ export { default as LanguageScene } from './language';
 export { default as MenuScene } from './menu';
 export { default as QuestionnaresScene } from './questionnares';
 export { default as QuestionnareNewScene } from './questionnares/new';
+export { default as QuestionnareTakeScene } from './questionnares/take';

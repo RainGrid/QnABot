@@ -1,11 +1,6 @@
 import { Markup } from 'telegraf';
-import { TelegrafContext } from '../../types';
+import { Button, TelegrafContext } from '../../types';
 import { getKeyboardRows } from '../../utils';
-
-type Button = {
-  cmd: string;
-  cb?: (ctx: TelegrafContext) => Promise<void>;
-};
 
 export const sendKeyboard = async (ctx: TelegrafContext): Promise<void> => {
   const buttons: Button[] = [

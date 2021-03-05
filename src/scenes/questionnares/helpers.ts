@@ -1,14 +1,13 @@
 import { Markup } from 'telegraf';
-import { TelegrafContext } from '../../types';
+import { Button, TelegrafContext } from '../../types';
 import { enterMenu, enterScene, getKeyboardRows } from '../../utils';
 import { actionImport } from './actions';
 
-export type Button = {
-  cmd: string;
-  cb?: (ctx: TelegrafContext) => Promise<void>;
-};
-
 export const buttons: Button[] = [
+  {
+    cmd: 'qtake',
+    cb: enterScene('questionnare_take'),
+  },
   {
     cmd: 'qcreate',
     cb: enterScene('questionnare_new'),
