@@ -16,7 +16,7 @@ const qRegex = new RegExp('/q:(.*)/$');
 export const qSingleMenu = new MenuTemplate<TelegrafContext>(
   async (ctx, path) => {
     if (!ctx.match) {
-      (ctx.match as any) = path.match(qRegex);
+      ctx.match = qRegex.exec(path) || undefined;
     }
     const q = await getQuestionnare(ctx);
     if (q) {

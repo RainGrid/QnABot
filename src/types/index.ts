@@ -1,4 +1,5 @@
 // Dependencies
+import { DocumentType } from '@typegoose/typegoose';
 import { Context, Scenes } from 'telegraf';
 import I18N from 'telegraf-i18n';
 import { User } from '../models';
@@ -8,11 +9,11 @@ interface QNASceneSession extends Scenes.SceneSessionData {
 }
 
 export interface TelegrafContext extends Context {
-  dbuser: User;
+  dbuser: DocumentType<User>;
   i18n: I18N;
   session: any;
   scene: Scenes.SceneContextScene<TelegrafContext, QNASceneSession>;
-  readonly match: RegExpExecArray | undefined;
+  match: RegExpExecArray | undefined;
 }
 
 export type Button = {

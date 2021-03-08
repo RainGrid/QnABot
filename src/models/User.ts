@@ -1,5 +1,10 @@
 // Dependencies
-import { getModelForClass, post, prop } from '@typegoose/typegoose';
+import {
+  DocumentType,
+  getModelForClass,
+  post,
+  prop,
+} from '@typegoose/typegoose';
 import { Types } from 'mongoose';
 import { QuestionnareModel } from './Questionnare';
 
@@ -40,7 +45,7 @@ export const UserModel = getModelForClass(User, {
 });
 
 // Get or create user
-export async function findUser(id: number): Promise<User> {
+export async function findUser(id: number): Promise<DocumentType<User>> {
   const user = await UserModel.findOne({ id });
   if (!user) {
     const newUser = new UserModel({ id });

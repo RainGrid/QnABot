@@ -1,10 +1,8 @@
 import dayjs = require('dayjs');
-import { QuestionnareAttemptModel } from '../../../models';
 import { createBackMainMenuButtons, MenuTemplate } from 'telegraf-inline-menu';
+import { QuestionnareAttemptModel } from '../../../models';
 import { TelegrafContext } from '../../../types';
 import { getQuestionnare } from './helpers';
-
-const qRegex = new RegExp('/q:(.*)/$');
 
 const periods = ['day', 'week', 'month', 'year', 'alltime'];
 
@@ -33,18 +31,13 @@ async function getStats(
   }
 }
 
-export const qStatsMenu = new MenuTemplate<TelegrafContext>(
-  async (ctx, path) => {
-    if (!ctx.match) {
-      (ctx.match as any) = path.match(qRegex);
-    }
-    const q = await getQuestionnare(ctx);
-    if (q) {
-      return `${q.name} statistics`;
-    }
-    return '';
-  },
-);
+export const qStatsMenu = new MenuTemplate<TelegrafContext>(async (ctx) => {
+  const q = await getQuestionnare(ctx);
+  if (q) {
+    return `${q.name} statistics`;
+  }
+  return '';
+});
 
 qStatsMenu.choose('stP', periods, {
   do: async (ctx, key) => {

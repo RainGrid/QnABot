@@ -1,9 +1,10 @@
 // Dependencies
 import { Telegraf } from 'telegraf';
 import { TelegrafContext } from '../types';
+import { enterScene } from '../utils';
 
 export function setupHelp(bot: Telegraf<TelegrafContext>): void {
   bot.command(['help', 'start'], (ctx) => {
-    ctx.replyWithHTML(ctx.i18n.t('help_message'));
+    enterScene('help')(ctx);
   });
 }

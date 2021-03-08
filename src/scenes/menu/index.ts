@@ -1,12 +1,12 @@
 import { Scenes } from 'telegraf';
-import { TelegrafContext } from '../../types';
+import { Button, TelegrafContext } from '../../types';
 import {
   actionEnterAuthorScene,
   actionEnterHelpScene,
   actionEnterQuestionnaresScene,
   actionSendLanguageKeyboard,
 } from './actions';
-import { Button, sendMainKeyboard } from './helpers';
+import { sendMainKeyboard } from './helpers';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { match } = require('telegraf-i18n');
 
