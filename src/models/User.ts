@@ -5,8 +5,11 @@ import {
   post,
   prop,
 } from '@typegoose/typegoose';
-import { Types } from 'mongoose';
+import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 import { QuestionnareModel } from './Questionnare';
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface User extends Base {}
 
 async function deleteDependencies(user: User): Promise<void> {
   await QuestionnareModel.deleteMany({ user });
@@ -29,9 +32,7 @@ async function deleteDependencies(user: User): Promise<void> {
     await deleteDependencies(q);
   }
 })
-export class User {
-  _id?: Types.ObjectId;
-
+export class User extends TimeStamps {
   @prop({ required: true, index: true, unique: true })
   id!: number;
 

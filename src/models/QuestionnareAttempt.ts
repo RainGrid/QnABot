@@ -1,17 +1,17 @@
 // Dependencies
 import { getModelForClass, prop, Ref } from '@typegoose/typegoose';
-import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
-import { Schema, Types } from 'mongoose';
+import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 import { Questionnare } from './Questionnare';
 import { User } from './User';
 
-export class QuestionnareAttempt extends TimeStamps {
-  _id?: Types.ObjectId;
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface QuestionnareAttempt extends Base {}
 
-  @prop({ required: true, type: Schema.Types.ObjectId })
+export class QuestionnareAttempt extends TimeStamps {
+  @prop({ required: true, ref: User })
   user!: Ref<User>;
 
-  @prop({ required: true, type: Schema.Types.ObjectId })
+  @prop({ required: true, ref: Questionnare })
   questionnare!: Ref<Questionnare>;
 
   @prop({ required: true, default: false })

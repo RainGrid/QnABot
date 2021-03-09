@@ -7,9 +7,9 @@ export async function handleLanguageSelect(
   await ctx.answerCbQuery();
 
   if (ctx.callbackQuery?.message && 'data' in ctx.callbackQuery) {
-    let user = ctx.dbuser;
+    const user = ctx.dbuser;
     user.language = ctx.callbackQuery.data;
-    user = await user.save();
+    await user.save();
     const message = ctx.callbackQuery.message;
     ctx.i18n.locale(ctx.callbackQuery.data);
 

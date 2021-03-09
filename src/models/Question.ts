@@ -1,6 +1,6 @@
 // Dependencies
 import { getModelForClass, post, prop, Ref } from '@typegoose/typegoose';
-import { Schema, Types } from 'mongoose';
+import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 import { AnswerModel } from './Answer';
 import { Questionnare } from './Questionnare';
 
@@ -10,6 +10,9 @@ export enum QuestionType {
   Choice,
   MultipleChoice,
 }
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface Question extends Base {}
 
 async function deleteDependencies(question: Question): Promise<void> {
   await AnswerModel.deleteMany({ question });
@@ -32,22 +35,20 @@ async function deleteDependencies(question: Question): Promise<void> {
   //   await deleteDependencies(q);
   // }
 })
-export class Question {
-  _id?: Types.ObjectId;
-
+export class Question extends TimeStamps {
   @prop({ required: true })
   name!: string;
 
   @prop({})
   description?: string;
 
-  @prop({ required: true, default: QuestionType.Short })
+  @prop({ required: true, default: QuestionType.Short, enum: QuestionType })
   type!: QuestionType;
 
-  @prop({ type: Schema.Types.String })
+  @prop({ type: () => [String] })
   options?: string[];
 
-  @prop({ type: Schema.Types.String })
+  @prop({ type: () => [String] })
   labels?: string[];
 
   @prop({ required: true, default: false })
@@ -56,7 +57,7 @@ export class Question {
   @prop({ required: true, default: 0 })
   sortOrder!: number;
 
-  @prop({ required: true, type: Schema.Types.ObjectId })
+  @prop({ required: true, ref: Questionnare })
   questionnare!: Ref<Questionnare>;
 }
 

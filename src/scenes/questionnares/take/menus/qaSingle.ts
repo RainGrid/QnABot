@@ -5,7 +5,7 @@ const qRegex = new RegExp('/q:(.*)/$');
 
 export const qaSingleMenu = new MenuTemplate<TelegrafContext>(
   async (ctx, path) => {
-    return '';
+    return '--';
   },
 );
 

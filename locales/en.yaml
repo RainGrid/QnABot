@@ -21,6 +21,10 @@ qimport_error: Import error
 qimport_success: Import is successfully finished
 
 qtake: Take
+qtake_code: Enter the code
+qtake_enter_code: Please enter the code
+qtake_wrong_code: Wrong code
+
 qcreate: Create new
 
 qnew_name: Enter the name

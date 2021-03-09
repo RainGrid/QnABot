@@ -1,7 +1,7 @@
 import { Scenes } from 'telegraf';
 import { TelegrafContext } from '../../../types';
-import { buttons } from './helpers';
-import { sendMainKeyboard } from './helpers';
+import { actionProcessPayload } from './actions';
+import { buttons, sendMainKeyboard } from './helpers';
 import { takeMenuMiddleware } from './menus';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { match } = require('telegraf-i18n');
@@ -20,5 +20,7 @@ buttons.map((button) => {
     scene.hears(match(button.cmd), button.cb);
   }
 });
+
+scene.on('text', actionProcessPayload);
 
 export default scene;
