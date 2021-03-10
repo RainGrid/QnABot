@@ -19,10 +19,11 @@ async function getStats(
 
   const q = await getQuestionnare(ctx);
   if (q) {
-    const attempts = await QuestionnareAttemptModel.find({
-      questionnare: q,
-      createdAt: dateFrom,
-    });
+    const query: any = { questionnare: q };
+    if (dateFrom) {
+      query.createdAt = { $gte: dateFrom };
+    }
+    const attempts = await QuestionnareAttemptModel.find(query);
     return ctx.i18n.t('qstats_count', {
       period: ctx.i18n.t(period).toLowerCase(),
       commonCount: attempts.length,

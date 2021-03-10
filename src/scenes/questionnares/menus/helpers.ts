@@ -23,8 +23,9 @@ export async function getQuestionnare(
 export async function getQuestion(
   ctx: TelegrafContext,
   index?: number,
+  qIndex?: number,
 ): Promise<DocumentType<Question> | null> {
-  const q = await getQuestionnare(ctx);
+  const q = await getQuestionnare(ctx, qIndex);
   if (q) {
     const qs = await QuestionModel.find({ questionnare: q })
       .skip(index !== undefined ? index : +ctx.match![2])

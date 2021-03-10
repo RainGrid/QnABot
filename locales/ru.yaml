@@ -12,6 +12,7 @@ help: Помощь
 back: Назад
 mainmenu: Главное меню
 delete: Удалить
+type: Тип
 about_author: Волох Ярослав @raingrid
 
 qimport: Импорт Гугл Формы
@@ -32,6 +33,7 @@ qnew_descr: Введите описание
 qnew_success: Вопросник успешно создан
 
 qenabled: Активен
+qurequired: Обязательный
 
 qstats: Статистика
 qstats_count: За период '${period}' ${finishedCount} пользователей из ${commonCount} завершили попытку
@@ -48,3 +50,11 @@ edit_descr: Редактировать описание
 edit_descr_req: Введите описание
 
 questionnares_attempts: Ваши попытки
+
+add_new: Добавить новый
+add_new_req: Введите название
+
+type0: Краткий ответ
+type1: Развернутый ответ
+type2: Выбор
+type3: Множественный выбор

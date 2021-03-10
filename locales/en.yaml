@@ -12,6 +12,7 @@ help: Help
 back: Back
 mainmenu: Main menu
 delete: Delete
+type: Type
 about_author: Volokh Y @raingrid
 
 qimport: Import Google Form
@@ -32,6 +33,7 @@ qnew_descr: Enter the description
 qnew_success: Questionnare is successfully created
 
 qenabled: Active
+qurequired: Required
 
 qstats: Statistics
 qstats_count: ${finishedCount} users from ${commonCount} has finished their attempt per '${period}'
@@ -48,3 +50,11 @@ edit_descr: Edit descrpition
 edit_descr_req: Enter the description
 
 questionnares_attempts: Your attempts
+
+add_new: Add new
+add_new_req: Enter the name
+
+type0: Short answer
+type1: Paragraph
+type2: Select
+type3: Multiselect

@@ -1,19 +1,79 @@
-import { createBackMainMenuButtons, MenuTemplate } from 'telegraf-inline-menu';
+import {
+  createBackMainMenuButtons,
+  getMenuOfPath,
+  MenuTemplate,
+  replyMenuToContext,
+} from 'telegraf-inline-menu';
+import TelegrafStatelessQuestion from 'telegraf-stateless-question';
 import { TelegrafContext } from '../../../types';
+import { sendMainKeyboard } from '../helpers';
 import { getQuestion } from './helpers';
 import { opListMenu } from './opList';
 
-export const quSingleMenu = new MenuTemplate<TelegrafContext>(async (ctx) => {
-  const qu = await getQuestion(ctx);
-  if (qu) {
-    return qu.name;
-  }
-  return '--';
-});
+const qRegex = new RegExp('/q:(.*)/qus/qu:(.*)/$');
+
+export const quSingleMenu = new MenuTemplate<TelegrafContext>(
+  async (ctx, path) => {
+    if (!ctx.match) {
+      ctx.match = qRegex.exec(path) || undefined;
+    }
+    const qu = await getQuestion(ctx);
+    if (qu) {
+      return `${qu.name}\n${ctx.i18n.t('type')}: ${ctx.i18n.t(
+        'type' + qu.type.toString(),
+      )}\n${qu.description || ''}`;
+    }
+    return '--';
+  },
+);
 
 quSingleMenu.submenu((ctx) => ctx.i18n.t('options'), 'ops', opListMenu);
 
+quSingleMenu.interact((ctx) => ctx.i18n.t('edit_name'), 'quEditName', {
+  do: async (ctx, path) => {
+    const additionalState = getMenuOfPath(path);
+    await quName.replyWithMarkdown(
+      ctx,
+      ctx.i18n.t('edit_name_req'),
+      additionalState,
+    );
+    return true;
+  },
+});
+
+quSingleMenu.interact((ctx) => ctx.i18n.t('edit_descr'), 'quEditDescr', {
+  joinLastRow: true,
+  do: async (ctx, path) => {
+    const additionalState = getMenuOfPath(path);
+    await quDescr.replyWithMarkdown(
+      ctx,
+      ctx.i18n.t('edit_descr_req'),
+      additionalState,
+    );
+    return true;
+  },
+});
+
+quSingleMenu.toggle((ctx) => ctx.i18n.t('qurequired'), 'req', {
+  set: async (ctx, choice) => {
+    const qu = await getQuestion(ctx);
+    if (qu) {
+      qu.isRequired = choice;
+      await qu.save();
+    }
+    return true;
+  },
+  isSet: async (ctx) => {
+    const qu = await getQuestion(ctx);
+    if (qu) {
+      return qu.isRequired;
+    }
+    return false;
+  },
+});
+
 quSingleMenu.interact((ctx) => ctx.i18n.t('delete'), 'del', {
+  joinLastRow: true,
   do: async (ctx) => {
     const qu = await getQuestion(ctx);
     if (qu) {
@@ -28,4 +88,42 @@ quSingleMenu.manualRow(
     (ctx) => ctx.i18n.t('back'),
     (ctx) => ctx.i18n.t('mainmenu'),
   ),
+);
+
+export const quName = new TelegrafStatelessQuestion<TelegrafContext>(
+  'quName',
+  async (ctx, path) => {
+    if ('text' in ctx.message) {
+      const answer = ctx.message.text;
+      const parts = path.match(qRegex);
+      if (parts && parts[1] && parts[2]) {
+        const qu = await getQuestion(ctx, +parts[2], +parts[1]);
+        if (qu) {
+          qu.name = answer;
+          await qu.save();
+        }
+      }
+      await sendMainKeyboard(ctx);
+      await replyMenuToContext(quSingleMenu, ctx, path);
+    }
+  },
+);
+
+export const quDescr = new TelegrafStatelessQuestion<TelegrafContext>(
+  'quDescr',
+  async (ctx, path) => {
+    if ('text' in ctx.message) {
+      const answer = ctx.message.text;
+      const parts = path.match(qRegex);
+      if (parts && parts[1] && parts[2]) {
+        const qu = await getQuestion(ctx, +parts[2], +parts[1]);
+        if (qu) {
+          qu.description = answer;
+          await qu.save();
+        }
+      }
+      await sendMainKeyboard(ctx);
+      await replyMenuToContext(quSingleMenu, ctx, path);
+    }
+  },
 );
