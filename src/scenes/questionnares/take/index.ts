@@ -1,10 +1,9 @@
 import { Scenes } from 'telegraf';
 import { TelegrafContext } from '../../../types';
+import { attachButtons } from '../../../utils';
 import { actionProcessPayload } from './actions';
 import { buttons, sendMainKeyboard } from './helpers';
 import { takeMenuMiddleware } from './menus';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { match } = require('telegraf-i18n');
 
 const scene = new Scenes.BaseScene<TelegrafContext>('questionnare_take');
 
@@ -15,11 +14,7 @@ scene.enter(async (ctx: TelegrafContext) => {
   takeMenuMiddleware.replyToContext(ctx);
 });
 
-buttons.map((button) => {
-  if (button.cb) {
-    scene.hears(match(button.cmd), button.cb);
-  }
-});
+attachButtons(scene, buttons);
 
 scene.on('text', actionProcessPayload);
 

@@ -1,8 +1,7 @@
 import { Scenes } from 'telegraf';
 import { TelegrafContext } from '../../types';
-import { sendKeyboard } from './helpers';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { match } = require('telegraf-i18n');
+import { attachButtons } from '../../utils';
+import { buttons, sendKeyboard } from './helpers';
 
 const scene = new Scenes.BaseScene<TelegrafContext>('author');
 
@@ -10,8 +9,6 @@ scene.enter(async (ctx: TelegrafContext) => {
   await sendKeyboard(ctx);
 });
 
-scene.hears(match('back'), async (ctx) => {
-  ctx.scene.enter('menu');
-});
+attachButtons(scene, buttons);
 
 export default scene;

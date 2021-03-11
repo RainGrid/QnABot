@@ -1,15 +1,13 @@
-import { Markup } from 'telegraf';
 import { Button, TelegrafContext } from '../../types';
-import { getKeyboardRows } from '../../utils';
+import { enterMenu, getDefaultMarkup } from '../../utils';
+
+export const buttons: Button[] = [
+  {
+    cmd: 'back',
+    cb: enterMenu,
+  },
+];
 
 export const sendKeyboard = async (ctx: TelegrafContext): Promise<void> => {
-  const buttons: Button[] = [
-    {
-      cmd: ctx.i18n.t('back'),
-    },
-  ];
-
-  const rows = getKeyboardRows(buttons.map((btn) => btn.cmd));
-  const markup = Markup.keyboard(rows).oneTime().resize();
-  await ctx.reply(ctx.i18n.t('about_author'), markup);
+  await ctx.reply(ctx.i18n.t('about_author'), getDefaultMarkup(ctx, buttons));
 };
