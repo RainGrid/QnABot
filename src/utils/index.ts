@@ -59,10 +59,10 @@ export const logCtx = async (
   next();
 };
 
-export const attachButtons = async (
+export const attachButtons = (
   scene: Scenes.BaseScene<TelegrafContext>,
   buttons: Button[],
-) => {
+): void => {
   buttons.map((button) => {
     if (button.cb) {
       scene.hears(match(button.cmd), button.cb);

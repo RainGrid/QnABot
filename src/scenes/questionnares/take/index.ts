@@ -4,10 +4,12 @@ import { attachButtons } from '../../../utils';
 import { actionProcessPayload } from './actions';
 import { buttons, sendMainKeyboard } from './helpers';
 import { takeMenuMiddleware } from './menus';
+import { actionHandleAnswer, qaMenuMiddleware } from './menus/qaSingle';
 
 const scene = new Scenes.BaseScene<TelegrafContext>('questionnare_take');
 
 scene.use(takeMenuMiddleware);
+scene.use(qaMenuMiddleware);
 
 scene.enter(async (ctx: TelegrafContext) => {
   await sendMainKeyboard(ctx);
@@ -17,5 +19,6 @@ scene.enter(async (ctx: TelegrafContext) => {
 attachButtons(scene, buttons);
 
 scene.on('text', actionProcessPayload);
+scene.on('text', actionHandleAnswer);
 
 export default scene;

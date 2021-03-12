@@ -1,4 +1,8 @@
-import { MenuMiddleware, MenuTemplate } from 'telegraf-inline-menu';
+import {
+  MenuMiddleware,
+  MenuTemplate,
+  replyMenuToContext,
+} from 'telegraf-inline-menu';
 import { Questionnare, QuestionnareAttemptModel } from '../../../../models';
 import { TelegrafContext } from '../../../../types';
 import { qaSingleMenu } from './qaSingle';
@@ -7,17 +11,27 @@ export const takeMenu = new MenuTemplate<TelegrafContext>((ctx) =>
   ctx.i18n.t('questionnares_attempts'),
 );
 
-takeMenu.chooseIntoSubmenu(
+takeMenu.choose(
   'q',
   async (ctx) => {
-    const qas = await QuestionnareAttemptModel.find({ user: ctx.dbuser });
-    return qas.map((_qa, index) => index.toString());
+    const qas = await QuestionnareAttemptModel.find({
+      user: ctx.dbuser,
+    });
+    return qas.map((qa) => qa._id.toString());
   },
-  qaSingleMenu,
   {
+    do: async (ctx, qaId) => {
+      ctx.scene.session.data = { qaId };
+      await replyMenuToContext(qaSingleMenu, ctx, 'qamenu/');
+      await ctx.answerCbQuery();
+      await ctx.deleteMessage();
+      return false;
+    },
     columns: 2,
     buttonText: async (ctx, key) => {
-      const qas = await QuestionnareAttemptModel.find({ user: ctx.dbuser })
+      const qas = await QuestionnareAttemptModel.find({
+        user: ctx.dbuser,
+      })
         .skip(+key)
         .limit(1)
         .populate('questionnare');
@@ -29,4 +43,4 @@ takeMenu.chooseIntoSubmenu(
   },
 );
 
-export const takeMenuMiddleware = new MenuMiddleware('/', takeMenu);
+export const takeMenuMiddleware = new MenuMiddleware('qasmenu/', takeMenu);

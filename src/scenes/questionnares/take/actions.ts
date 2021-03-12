@@ -11,6 +11,7 @@ export const actionEnterCodeStep = async (
 
 export const actionProcessPayload = async (
   ctx: TelegrafContext,
+  next: any,
 ): Promise<void> => {
   if (ctx.message && 'text' in ctx.message) {
     if (ctx.scene.session.data?.step === 'code') {
@@ -20,12 +21,20 @@ export const actionProcessPayload = async (
         return;
       }
       const q = await QuestionnareModel.findById(code);
-      if (!q) {
+      if (!q || !q.isEnabled) {
         await ctx.reply(ctx.i18n.t('qtake_wrong_code'));
         return;
       }
-      ctx.session.questionnareID = code;
+
+      const qa = new QuestionnareAttemptModel({
+        questionnare: q,
+        user: ctx.dbuser,
+        isFinished: false,
+      });
+      await qa.save();
+
       ctx.scene.reenter();
     }
   }
+  next();
 };

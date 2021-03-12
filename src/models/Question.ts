@@ -1,5 +1,11 @@
 // Dependencies
-import { getModelForClass, post, prop, Ref } from '@typegoose/typegoose';
+import {
+  DocumentType,
+  getModelForClass,
+  post,
+  prop,
+  Ref,
+} from '@typegoose/typegoose';
 import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 import { AnswerModel } from './Answer';
 import { Questionnare } from './Questionnare';
@@ -14,7 +20,9 @@ export enum QuestionType {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Question extends Base {}
 
-async function deleteDependencies(question: Question): Promise<void> {
+async function deleteDependencies(
+  question: DocumentType<Question>,
+): Promise<void> {
   await AnswerModel.deleteMany({ question });
 }
 

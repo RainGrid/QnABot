@@ -11,7 +11,7 @@ export class QuestionnareAttempt extends TimeStamps {
   @prop({ required: true, ref: User })
   user!: Ref<User>;
 
-  @prop({ required: true, ref: Questionnare })
+  @prop({ required: true, ref: 'Questionnare' })
   questionnare!: Ref<Questionnare>;
 
   @prop({ required: true, default: false })

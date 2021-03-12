@@ -1,14 +1,24 @@
 // Dependencies
-import { getModelForClass, post, prop, Ref } from '@typegoose/typegoose';
+import {
+  DocumentType,
+  getModelForClass,
+  post,
+  prop,
+  Ref,
+} from '@typegoose/typegoose';
 import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
-import { User } from './User';
+import { QuestionnareAttemptModel } from './QuestionnareAttempt';
 import { QuestionModel } from './Question';
+import { User } from './User';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Questionnare extends Base {}
 
-async function deleteDependencies(questionnare: Questionnare): Promise<void> {
+async function deleteDependencies(
+  questionnare: DocumentType<Questionnare>,
+): Promise<void> {
   await QuestionModel.deleteMany({ questionnare });
+  await QuestionnareAttemptModel.deleteMany({ questionnare });
 }
 @post<Questionnare>('findOneAndRemove', async (questionnare) => {
   await deleteDependencies(questionnare);
@@ -22,7 +32,7 @@ async function deleteDependencies(questionnare: Questionnare): Promise<void> {
 @post<Questionnare>('deleteOne', async (questionnare) => {
   await deleteDependencies(questionnare);
 })
-@post<Questionnare>('deleteMany', async (questionnare) => {
+@post<Questionnare>('deleteMany', async (questionnares) => {
   // for (const q of questionnare) {
   //   await deleteDependencies(q);
   // }
