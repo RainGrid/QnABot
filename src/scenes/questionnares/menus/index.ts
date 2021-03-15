@@ -4,7 +4,7 @@ import { TelegrafContext } from '../../../types';
 import { qSingleMenu } from './qSingle';
 
 export const menu = new MenuTemplate<TelegrafContext>((ctx) =>
-  ctx.i18n.t('questionnares'),
+  ctx.i18n.t('questionnares_your'),
 );
 
 menu.chooseIntoSubmenu(

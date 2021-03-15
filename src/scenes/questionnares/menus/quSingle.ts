@@ -5,10 +5,12 @@ import {
   replyMenuToContext,
 } from 'telegraf-inline-menu';
 import TelegrafStatelessQuestion from 'telegraf-stateless-question';
+import { QuestionType } from '../../../models';
 import { TelegrafContext } from '../../../types';
 import { sendMainKeyboard } from '../helpers';
 import { getQuestion } from './helpers';
 import { opListMenu } from './opList';
+import { typeListMenu } from './typeList';
 
 const qRegex = new RegExp('/q:(.*)/qus/qu:(.*)/$');
 
@@ -27,7 +29,20 @@ export const quSingleMenu = new MenuTemplate<TelegrafContext>(
   },
 );
 
-quSingleMenu.submenu((ctx) => ctx.i18n.t('options'), 'ops', opListMenu);
+quSingleMenu.submenu(
+  async (ctx) => {
+    const qu = await getQuestion(ctx);
+    if (
+      qu &&
+      !(qu.type === QuestionType.Short || qu.type === QuestionType.Paragraph)
+    ) {
+      return ctx.i18n.t('options');
+    }
+    return '';
+  },
+  'ops',
+  opListMenu,
+);
 
 quSingleMenu.interact((ctx) => ctx.i18n.t('edit_name'), 'quEditName', {
   do: async (ctx, path) => {
@@ -71,6 +86,8 @@ quSingleMenu.toggle((ctx) => ctx.i18n.t('qurequired'), 'req', {
     return false;
   },
 });
+
+quSingleMenu.submenu((ctx) => ctx.i18n.t('type'), 'type', typeListMenu);
 
 quSingleMenu.interact((ctx) => ctx.i18n.t('delete'), 'del', {
   joinLastRow: true,

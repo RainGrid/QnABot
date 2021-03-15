@@ -29,14 +29,11 @@ takeMenu.choose(
     },
     columns: 2,
     buttonText: async (ctx, key) => {
-      const qas = await QuestionnareAttemptModel.find({
-        user: ctx.dbuser,
-      })
-        .skip(+key)
-        .limit(1)
-        .populate('questionnare');
-      if (qas?.length) {
-        return (qas[0].questionnare as Questionnare).name;
+      const qa = await QuestionnareAttemptModel.findById(key).populate(
+        'questionnare',
+      );
+      if (qa) {
+        return (qa.questionnare as Questionnare).name;
       }
       return '';
     },
