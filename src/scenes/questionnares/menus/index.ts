@@ -21,11 +21,18 @@ menu.chooseIntoSubmenu(
         .skip(+key)
         .limit(1);
       if (q?.length) {
-        return q[0].name;
+        return `${+key + 1}. ${q[0].name}`;
       }
       return '';
     },
   },
 );
+
+menu.interact((ctx) => ctx.i18n.t('close'), 'qsClose', {
+  do: async (ctx) => {
+    await ctx.deleteMessage();
+    return false;
+  },
+});
 
 export const menuMiddleware = new MenuMiddleware('/', menu);

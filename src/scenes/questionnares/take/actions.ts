@@ -34,6 +34,7 @@ export const actionProcessPayload = async (
       await qa.save();
 
       ctx.scene.reenter();
+      return;
     }
   }
   next();

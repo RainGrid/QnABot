@@ -40,4 +40,11 @@ takeMenu.choose(
   },
 );
 
+takeMenu.interact((ctx) => ctx.i18n.t('close'), 'qasClose', {
+  do: async (ctx) => {
+    await ctx.deleteMessage();
+    return false;
+  },
+});
+
 export const takeMenuMiddleware = new MenuMiddleware('qasmenu/', takeMenu);

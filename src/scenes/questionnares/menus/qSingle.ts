@@ -20,7 +20,9 @@ export const qSingleMenu = new MenuTemplate<TelegrafContext>(
     }
     const q = await getQuestionnare(ctx);
     if (q) {
-      return `${q.name}\n${q.description || 'no description'}`;
+      return `${q.name}\n${
+        q.description || 'no description'
+      }\n\n${ctx.i18n.t('qlink', { qId: q._id.toString() })}`;
     }
     return '';
   },

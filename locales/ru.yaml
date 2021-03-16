@@ -11,6 +11,7 @@ options: Варианты ответа
 author: Об авторе
 help: Помощь
 back: Назад
+close: Закрыть
 mainmenu: Главное меню
 delete: Удалить
 type: Тип
@@ -35,6 +36,7 @@ qnew_success: Вопросник успешно создан
 
 qenabled: Активен
 qurequired: Обязательный
+qlink: Ссылка на опросник https://telegram.me/q_n_a_bot?start=${qId}
 
 qstats: Статистика
 qstats_count: За период '${period}' ${finishedCount} пользователей из ${commonCount} завершили попытку
@@ -64,4 +66,3 @@ qa_answer_btn: Ввести ответ
 qa_answer_req: Введите ответ
 qa_finished: Попытка завершена
 qa_skip: Пропустить
-qa_close: Закрыть

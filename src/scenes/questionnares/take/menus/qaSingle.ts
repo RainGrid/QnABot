@@ -47,7 +47,9 @@ export const qaSingleMenu = new MenuTemplate<TelegrafContext>(async (ctx) => {
       }
       if (ctx.scene.session.data.question) {
         const response = `${qName}\n\n${
-          ctx.scene.session.data.question.name +
+          `${ctx.scene.session.data.question.sortOrder + 1}. ${
+            ctx.scene.session.data.question.name
+          }` +
           (ctx.scene.session.data.question.labels?.length === 1
             ? ' ' + ctx.scene.session.data.question.labels[0]
             : '')
@@ -166,7 +168,7 @@ qaSingleMenu.interact(
   },
 );
 
-qaSingleMenu.interact((ctx) => ctx.i18n.t('qa_close'), 'qaClose', {
+qaSingleMenu.interact((ctx) => ctx.i18n.t('close'), 'qaClose', {
   do: async (ctx) => {
     await ctx.deleteMessage();
     await replyMenuToContext(takeMenu, ctx, 'qasmenu/');

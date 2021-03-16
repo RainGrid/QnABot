@@ -28,6 +28,7 @@ function googleTypeToQuestionType(
 
 export const actionProcessPayload = async (
   ctx: TelegrafContext,
+  next: any,
 ): Promise<void> => {
   if (ctx.message && 'text' in ctx.message) {
     if (ctx.scene.session.data?.step === 'gf_link') {
@@ -86,13 +87,17 @@ export const actionProcessPayload = async (
           await q.save();
           await ctx.reply(ctx.i18n.t('qimport_success'));
           ctx.scene.reenter();
+          return;
         } catch (error) {
           console.log(error);
           await ctx.reply(ctx.i18n.t('qimport_error'));
+          return;
         }
       } else {
         await ctx.reply(ctx.i18n.t('qimport_link_wrong'));
+        return;
       }
     }
   }
+  next();
 };
