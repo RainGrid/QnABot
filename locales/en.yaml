@@ -1,5 +1,5 @@
 name: English
-help_message: Please write your question to @raingrid
+help_message: Please try /start if the bot is not responding. If you have more questions, please write to @raingrid
 language: Language
 language_select: Please, select the language
 language_selected: <b>Bot</b> now speaks English.
@@ -29,6 +29,7 @@ qtake: Take
 qtake_code: Enter the code
 qtake_enter_code: Please enter the code
 qtake_wrong_code: Wrong code
+qtake_disabled: The questionnare is disabled by owner
 
 qcreate: Create new
 
@@ -37,6 +38,7 @@ qnew_descr: Enter the description
 qnew_success: Questionnare is successfully created
 
 qenabled: Active
+qnotifications: Notifications
 qurequired: Required
 qlink: Questionnare link https://telegram.me/q_n_a_bot?start=${qId}
 
@@ -55,6 +57,7 @@ edit_descr: Edit descrpition
 edit_descr_req: Enter the description
 
 questionnares_attempts: Your attempts
+qanotification: New answer to questionnare "${qName}"
 
 add_new: Add new
 add_new_req: Enter the name

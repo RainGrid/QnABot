@@ -26,9 +26,7 @@ MongoClient.connect(process.env.MONGO!, {
   // Setup localization
   setupI18N(bot);
   // Setup session
-  bot.use(
-    session(db, { sessionName: 'session', collectionName: 'tgsessions' }),
-  );
+  bot.use(session(db, { collectionName: 'tgsessions' }));
   // Setup scenes
   setupStage(bot);
   // Setup commands

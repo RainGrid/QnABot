@@ -47,11 +47,10 @@ export const UserModel = getModelForClass(User, {
 
 // Get or create user
 export async function findUser(id: number): Promise<DocumentType<User>> {
-  const user = await UserModel.findOne({ id });
+  let user = await UserModel.findOne({ id });
   if (!user) {
-    const newUser = new UserModel({ id });
-    await newUser.save();
-    return newUser;
+    user = new UserModel({ id });
+    await user.save();
   }
   return user;
 }

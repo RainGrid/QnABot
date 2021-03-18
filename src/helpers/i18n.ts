@@ -7,8 +7,6 @@ const dirtyI18N = require('telegraf-i18n');
 
 const i18n: I18N = new dirtyI18N({
   directory: `${__dirname}/../../locales`,
-  defaultLanguage: 'en',
-  sessionName: 'session',
   useSession: false,
   allowMissing: false,
 });
@@ -16,7 +14,9 @@ const i18n: I18N = new dirtyI18N({
 export function setupI18N(bot: Telegraf<TelegrafContext>): void {
   bot.use(i18n.middleware());
   bot.use((ctx, next) => {
-    ctx.i18n.locale(ctx.dbuser.language);
+    if (ctx.dbuser) {
+      ctx.i18n.locale(ctx.dbuser.language);
+    }
     next();
   });
 }

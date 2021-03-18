@@ -49,6 +49,9 @@ export class Questionnare extends TimeStamps {
 
   @prop({ required: true, default: false })
   isEnabled!: boolean;
+
+  @prop({ required: true, default: false })
+  isNotificationsEnabled!: boolean;
 }
 
 // Get Questionnare model

@@ -1,5 +1,5 @@
 name: Русский
-help_message: Вы можете задать свой вопрос, написав @raingrid
+help_message: Попробуйте команду /start, если бот не отвечает. Если у вас остались вопросы, напишите @raingrid
 language: Язык
 language_select: Пожалуйста, выберите язык
 language_selected: <b>Бот</b> теперь говорит по-русски.
@@ -29,6 +29,7 @@ qtake: Пройти
 qtake_code: Ввести код
 qtake_enter_code: Введите код
 qtake_wrong_code: Вы ввели неверный код
+qtake_disabled: Опросник заблокирован владельцем
 
 qcreate: Создать
 
@@ -37,6 +38,7 @@ qnew_descr: Введите описание
 qnew_success: Вопросник успешно создан
 
 qenabled: Активен
+qnotifications: Уведомления
 qurequired: Обязательный
 qlink: Ссылка на опросник https://telegram.me/q_n_a_bot?start=${qId}
 
@@ -55,6 +57,7 @@ edit_descr: Редактировать описание
 edit_descr_req: Введите описание
 
 questionnares_attempts: Ваши попытки
+qanotification: Новый ответ на опросник "${qName}"
 
 add_new: Добавить новый
 add_new_req: Введите название

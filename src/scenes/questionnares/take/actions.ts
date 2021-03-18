@@ -1,6 +1,5 @@
-import { isValidObjectId } from 'mongoose';
-import { QuestionnareAttemptModel, QuestionnareModel } from '../../../models';
 import { TelegrafContext } from '../../../types';
+import { getOrCreateAttemptById } from './helpers';
 
 export const actionEnterCodeStep = async (
   ctx: TelegrafContext,
@@ -11,29 +10,13 @@ export const actionEnterCodeStep = async (
 
 export const actionProcessPayload = async (
   ctx: TelegrafContext,
-  next: any,
+  next: () => Promise<void>,
 ): Promise<void> => {
   if (ctx.message && 'text' in ctx.message) {
     if (ctx.scene.session.data?.step === 'code') {
       const code = ctx.message.text;
-      if (!isValidObjectId(code)) {
-        await ctx.reply(ctx.i18n.t('qtake_wrong_code'));
-        return;
-      }
-      const q = await QuestionnareModel.findById(code);
-      if (!q || !q.isEnabled) {
-        await ctx.reply(ctx.i18n.t('qtake_wrong_code'));
-        return;
-      }
-
-      const qa = new QuestionnareAttemptModel({
-        questionnare: q,
-        user: ctx.dbuser,
-        isFinished: false,
-      });
-      await qa.save();
-
-      ctx.scene.reenter();
+      await getOrCreateAttemptById(ctx, code);
+      await ctx.scene.reenter();
       return;
     }
   }

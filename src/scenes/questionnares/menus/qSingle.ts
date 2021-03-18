@@ -73,9 +73,26 @@ qSingleMenu.toggle((ctx) => ctx.i18n.t('qenabled'), 'en', {
   },
 });
 
-qSingleMenu.submenu((ctx) => ctx.i18n.t('qstats'), 'st', qStatsMenu, {
+qSingleMenu.toggle((ctx) => ctx.i18n.t('qnotifications'), 'not', {
   joinLastRow: true,
+  set: async (ctx, choice) => {
+    const q = await getQuestionnare(ctx);
+    if (q) {
+      q.isNotificationsEnabled = choice;
+      await q.save();
+    }
+    return true;
+  },
+  isSet: async (ctx) => {
+    const q = await getQuestionnare(ctx);
+    if (q) {
+      return q.isNotificationsEnabled;
+    }
+    return false;
+  },
 });
+
+qSingleMenu.submenu((ctx) => ctx.i18n.t('qstats'), 'st', qStatsMenu);
 
 qSingleMenu.interact((ctx) => ctx.i18n.t('delete'), 'del', {
   do: async (ctx) => {

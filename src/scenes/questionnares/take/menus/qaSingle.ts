@@ -4,6 +4,7 @@ import {
   replyMenuToContext,
 } from 'telegraf-inline-menu';
 import { takeMenu } from '.';
+import { bot } from '../../../../helpers/bot';
 import {
   AnswerModel,
   Question,
@@ -11,6 +12,7 @@ import {
   Questionnare,
   QuestionnareAttemptModel,
   QuestionType,
+  UserModel,
 } from '../../../../models';
 import { TelegrafContext } from '../../../../types';
 
@@ -58,6 +60,23 @@ export const qaSingleMenu = new MenuTemplate<TelegrafContext>(async (ctx) => {
       } else {
         qa.isFinished = true;
         await qa.save();
+
+        if ((qa.questionnare as Questionnare).isNotificationsEnabled) {
+          const owner = await UserModel.findById(
+            (qa.questionnare as Questionnare).user,
+          );
+          if (owner) {
+            try {
+              await bot.telegram.sendMessage(
+                owner.id,
+                ctx.i18n.t('qanotification', {
+                  qName: (qa.questionnare as Questionnare).name,
+                }),
+              );
+            } catch (error) {}
+          }
+        }
+
         return ctx.i18n.t('qa_finished');
       }
     }
