@@ -4,6 +4,7 @@ dotenv.config({ path: `${__dirname}/../.env` });
 import { MongoClient } from 'mongodb';
 import { session } from 'telegraf-session-mongodb';
 import { setupHelp } from './commands/help';
+import { setupStart } from './commands/start';
 import { bot } from './helpers/bot';
 import { setupError } from './helpers/error';
 import { setupI18N } from './helpers/i18n';
@@ -31,6 +32,7 @@ MongoClient.connect(process.env.MONGO!, {
   setupStage(bot);
   // Setup commands
   setupHelp(bot);
+  setupStart(bot);
 
   bot.launch();
 

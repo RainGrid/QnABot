@@ -1,17 +1,11 @@
 import { Button, TelegrafContext } from '../../types';
-import { getDefaultMarkup } from '../../utils';
-import {
-  actionEnterAuthorScene,
-  actionEnterHelpScene,
-  actionEnterQuestionnaresScene,
-  actionSendLanguageKeyboard,
-} from './actions';
+import { enterScene, getDefaultMarkup } from '../../utils';
 
 export const buttons: Button[] = [
-  { cmd: 'questionnares', cb: actionEnterQuestionnaresScene },
-  { cmd: 'language', cb: actionSendLanguageKeyboard },
-  { cmd: 'help', cb: actionEnterHelpScene },
-  { cmd: 'author', cb: actionEnterAuthorScene },
+  { cmd: 'questionnares', cb: enterScene('questionnares') },
+  { cmd: 'language', cb: enterScene('language') },
+  { cmd: 'help', cb: enterScene('help') },
+  { cmd: 'author', cb: enterScene('author') },
 ];
 
 export const sendMainKeyboard = async (ctx: TelegrafContext): Promise<void> => {
