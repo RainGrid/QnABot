@@ -158,8 +158,6 @@ qaSingleMenu.select(
         ctx.scene.session.data.selections ??= [];
         isOpSet = ctx.scene.session.data.selections.includes(op);
       }
-
-      await ctx.answerCbQuery();
       return isOpSet;
     },
     columns: 2,
