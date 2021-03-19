@@ -15,10 +15,13 @@ export const actionProcessPayload = async (
   if (ctx.message && 'text' in ctx.message) {
     if (ctx.scene.session.data?.step === 'code') {
       const code = ctx.message.text;
-      await getOrCreateAttemptById(ctx, code);
-      await ctx.scene.reenter();
+      const qa = await getOrCreateAttemptById(ctx, code);
+      if (qa) {
+        ctx.session.qaId = qa._id.toString();
+        await ctx.scene.reenter();
+      }
       return;
     }
   }
-  next();
+  await next();
 };

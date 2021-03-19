@@ -8,13 +8,19 @@ import { actionHandleAnswer, qaMenuMiddleware } from './menus/qaSingle';
 
 const scene = new Scenes.BaseScene<TelegrafContext>('questionnare_take');
 
-scene.use(takeMenuMiddleware);
-scene.use(qaMenuMiddleware);
-
 scene.enter(async (ctx: TelegrafContext) => {
   await sendMainKeyboard(ctx);
-  takeMenuMiddleware.replyToContext(ctx);
+  if (ctx.session.qaId) {
+    ctx.scene.session.data = { qaId: ctx.session.qaId };
+    delete ctx.session.qaId;
+    await qaMenuMiddleware.replyToContext(ctx);
+  } else {
+    await takeMenuMiddleware.replyToContext(ctx);
+  }
 });
+
+scene.use(takeMenuMiddleware);
+scene.use(qaMenuMiddleware);
 
 attachButtons(scene, buttons);
 

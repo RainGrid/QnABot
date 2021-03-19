@@ -5,7 +5,7 @@ import I18N from 'telegraf-i18n';
 import { User } from '../models';
 
 interface QNASceneSession extends Scenes.SceneSessionData {
-  data?: any;
+  data?: { [key: string]: any };
 }
 
 export interface TelegrafContext extends Context {

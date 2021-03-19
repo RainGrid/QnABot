@@ -17,8 +17,6 @@ MongoClient.connect(process.env.MONGO!, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then((client) => {
-  const db = client.db();
-
   setupError(bot);
   // Check time
   checkTime(bot);
@@ -27,7 +25,7 @@ MongoClient.connect(process.env.MONGO!, {
   // Setup localization
   setupI18N(bot);
   // Setup session
-  bot.use(session(db, { collectionName: 'tgsessions' }));
+  bot.use(session(client.db()));
   // Setup scenes
   setupStage(bot);
   // Setup commands

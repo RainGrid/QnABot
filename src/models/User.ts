@@ -6,6 +6,7 @@ import {
   prop,
 } from '@typegoose/typegoose';
 import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
+import { newUserNotification } from '../utils';
 import { QuestionnareModel } from './Questionnare';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -51,6 +52,8 @@ export async function findUser(id: number): Promise<DocumentType<User>> {
   if (!user) {
     user = new UserModel({ id });
     await user.save();
+
+    await newUserNotification();
   }
   return user;
 }

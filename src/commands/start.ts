@@ -7,10 +7,14 @@ import { enterMenu } from '../utils';
 export function setupStart(bot: Telegraf<TelegrafContext>): void {
   bot.start(async (ctx) => {
     if (ctx.startPayload) {
-      await getOrCreateAttemptById(ctx, ctx.startPayload);
+      const qa = await getOrCreateAttemptById(ctx, ctx.startPayload);
+      if (qa) {
+        ctx.session.qaId = qa._id.toString();
+        await ctx.scene.enter('questionnare_take');
+      }
       return;
     } else {
-      enterMenu(ctx);
+      await enterMenu(ctx);
       return;
     }
   });

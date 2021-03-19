@@ -5,10 +5,10 @@ export function checkTime(bot: Telegraf<TelegrafContext>): void {
   bot.use(async (ctx, next) => {
     if (ctx.message) {
       if (new Date().getTime() / 1000 - ctx.message.date < 5 * 60) {
-        next();
+        await next();
       }
     } else {
-      next();
+      await next();
     }
   });
 }

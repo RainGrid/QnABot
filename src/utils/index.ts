@@ -1,5 +1,6 @@
 import { Markup, Scenes } from 'telegraf';
 import { InlineKeyboardButton } from 'telegraf/typings/telegram-types';
+import { bot } from '../helpers/bot';
 import { Button, TelegrafContext } from '../types';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { match } = require('telegraf-i18n');
@@ -24,10 +25,7 @@ export const getKeyboardRows = <
   return rows;
 };
 
-export const getDefaultMarkup = (
-  ctx: TelegrafContext,
-  buttons: Button[],
-): any => {
+export const getDefaultMarkup = (ctx: TelegrafContext, buttons: Button[]) => {
   const rows = getKeyboardRows(buttons.map((btn) => ctx.i18n.t(btn.cmd)));
   return Markup.keyboard(rows).oneTime().resize();
 };
@@ -47,7 +45,7 @@ export const defaultSceneData = async (
   next: () => Promise<void>,
 ): Promise<void> => {
   ctx.scene.session.data ??= {};
-  next();
+  await next();
 };
 
 export const logCtx = async (
@@ -56,7 +54,7 @@ export const logCtx = async (
 ): Promise<void> => {
   console.log(ctx);
 
-  next();
+  await next();
 };
 
 export const attachButtons = (
@@ -68,4 +66,10 @@ export const attachButtons = (
       scene.hears(match(button.cmd), button.cb);
     }
   });
+};
+
+export const newUserNotification = async (): Promise<void> => {
+  try {
+    await bot.telegram.sendMessage(+process.env.ADMIN!, 'New user registered');
+  } catch (error) {}
 };

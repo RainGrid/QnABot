@@ -28,7 +28,7 @@ function googleTypeToQuestionType(
 
 export const actionProcessPayload = async (
   ctx: TelegrafContext,
-  next: any,
+  next: () => Promise<void>,
 ): Promise<void> => {
   if (ctx.message && 'text' in ctx.message) {
     if (ctx.scene.session.data?.step === 'gf_link') {
@@ -99,5 +99,5 @@ export const actionProcessPayload = async (
       }
     }
   }
-  next();
+  await next();
 };

@@ -57,6 +57,5 @@ export const getOrCreateAttemptById = async (
     await qa.save();
   }
 
-  await ctx.scene.enter('questionnare_take');
   return qa;
 };

@@ -91,7 +91,9 @@ qaSingleMenu.choose(
       ctx.scene.session.data?.question?.options?.length &&
       ctx.scene.session.data?.question?.type === QuestionType.Choice
     ) {
-      return ctx.scene.session.data.question.options;
+      return ctx.scene.session.data.question.options.map((op: string) =>
+        op.replace('/', '|'),
+      );
     }
     return [];
   },
@@ -121,6 +123,90 @@ qaSingleMenu.choose(
   },
 );
 
+qaSingleMenu.select(
+  'qa',
+  async (ctx) => {
+    if (
+      ctx.scene.session.data?.question?.options?.length &&
+      ctx.scene.session.data?.question?.type === QuestionType.MultipleChoice
+    ) {
+      return ctx.scene.session.data.question.options.map((op: string) =>
+        op.replace('/', '|'),
+      );
+    }
+    return [];
+  },
+  {
+    set: async (ctx, op, newState) => {
+      if (ctx.scene.session.data?.qaId && ctx.scene.session.data?.question) {
+        ctx.scene.session.data.selections ??= [];
+        if (newState) {
+          ctx.scene.session.data.selections.push(op);
+        } else {
+          ctx.scene.session.data.selections = ctx.scene.session.data.selections.filter(
+            (el: string) => el !== op,
+          );
+        }
+      }
+
+      await ctx.answerCbQuery();
+      return true;
+    },
+    isSet: async (ctx, op) => {
+      let isOpSet = false;
+      if (ctx.scene.session.data?.qaId && ctx.scene.session.data?.question) {
+        ctx.scene.session.data.selections ??= [];
+        isOpSet = ctx.scene.session.data.selections.includes(op);
+      }
+
+      await ctx.answerCbQuery();
+      return isOpSet;
+    },
+    columns: 2,
+  },
+);
+
+qaSingleMenu.interact(
+  (ctx) => {
+    if (
+      ctx.scene.session.data?.qaId &&
+      ctx.scene.session.data?.question?.type === QuestionType.MultipleChoice
+    ) {
+      return ctx.i18n.t('qa_confirm');
+    }
+    return '';
+  },
+  'qaConfirm',
+  {
+    joinLastRow: true,
+    do: async (ctx) => {
+      if (ctx.scene.session.data?.qaId && ctx.scene.session.data?.question) {
+        const qa = await QuestionnareAttemptModel.findById(
+          ctx.scene.session.data.qaId,
+        );
+        if (qa) {
+          const an = new AnswerModel({
+            answer: ctx.scene.session.data?.selections
+              ? ctx.scene.session.data.selections.join(', ')
+              : '-',
+            user: ctx.dbuser,
+            attempt: qa,
+            question: ctx.scene.session.data.question,
+          });
+          await an.save();
+
+          if (ctx.scene.session.data?.selections) {
+            delete ctx.scene.session.data.selections;
+          }
+        }
+      }
+
+      await ctx.answerCbQuery();
+      return true;
+    },
+  },
+);
+
 qaSingleMenu.interact(
   (ctx) => {
     if (
@@ -135,6 +221,7 @@ qaSingleMenu.interact(
   'qaAnswer',
   {
     do: async (ctx) => {
+      ctx.scene.session.data ??= {};
       ctx.scene.session.data.answerRequired = true;
       await ctx.deleteMessage();
       const msg = await ctx.reply(ctx.i18n.t('qa_answer_req'));

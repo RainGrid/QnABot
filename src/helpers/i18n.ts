@@ -13,10 +13,10 @@ const i18n: I18N = new dirtyI18N({
 
 export function setupI18N(bot: Telegraf<TelegrafContext>): void {
   bot.use(i18n.middleware());
-  bot.use((ctx, next) => {
+  bot.use(async (ctx, next) => {
     if (ctx.dbuser) {
       ctx.i18n.locale(ctx.dbuser.language);
     }
-    next();
+    await next();
   });
 }

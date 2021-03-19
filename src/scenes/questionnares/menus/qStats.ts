@@ -1,4 +1,6 @@
 import dayjs = require('dayjs');
+import { DocumentType } from '@typegoose/typegoose';
+import { MongooseFilterQuery } from 'mongoose';
 import { createBackMainMenuButtons, MenuTemplate } from 'telegraf-inline-menu';
 import {
   Answer,
@@ -10,24 +12,33 @@ import { TelegrafContext } from '../../../types';
 import { getQuestionnare } from './helpers';
 import fs = require('fs');
 
-const periods = ['day', 'week', 'month', 'year', 'alltime'];
+enum StatisticPeriod {
+  Day = 'day',
+  Week = 'week',
+  Month = 'month',
+  Year = 'year',
+  AllTime = 'alltime',
+}
+
+const periods = [
+  StatisticPeriod.Day,
+  StatisticPeriod.Week,
+  StatisticPeriod.Month,
+  StatisticPeriod.Year,
+  StatisticPeriod.AllTime,
+];
 
 async function getStats(
   ctx: TelegrafContext,
-  period: string,
+  period: StatisticPeriod,
 ): Promise<string | void> {
-  let dateFrom: Date | undefined;
-  if (period !== 'alltime') {
-    dateFrom = dayjs()
-      .subtract(1, period as any)
-      .toDate();
-  }
-
   const q = await getQuestionnare(ctx);
   if (q) {
-    const query: any = { questionnare: q };
-    if (dateFrom) {
-      query.createdAt = { $gte: dateFrom };
+    const query: MongooseFilterQuery<DocumentType<QuestionnareAttempt>> = {
+      questionnare: q,
+    };
+    if (period !== StatisticPeriod.AllTime) {
+      query.createdAt = { $gte: dayjs().subtract(1, period).toDate() };
     }
     const attempts = await QuestionnareAttemptModel.find(query);
     return ctx.i18n.t('qstats_count', {
@@ -48,11 +59,15 @@ export const qStatsMenu = new MenuTemplate<TelegrafContext>(async (ctx) => {
 
 qStatsMenu.choose('stP', periods, {
   do: async (ctx, key) => {
-    const answer = await getStats(ctx, key);
-    if (answer) {
-      await ctx.reply(answer);
+    if (
+      Object.values(StatisticPeriod).find((period) => period.toString() === key)
+    ) {
+      const answer = await getStats(ctx, key as StatisticPeriod);
+      if (answer) {
+        await ctx.reply(answer);
+      }
+      await ctx.answerCbQuery();
     }
-    await ctx.answerCbQuery();
     return false;
   },
   columns: 2,
@@ -61,7 +76,7 @@ qStatsMenu.choose('stP', periods, {
 
 qStatsMenu.interact((ctx) => ctx.i18n.t('export'), 'qExport', {
   joinLastRow: true,
-  do: async (ctx, path) => {
+  do: async (ctx) => {
     const q = await getQuestionnare(ctx);
     if (q) {
       const answers = await QuestionnareAttemptModel.aggregate<

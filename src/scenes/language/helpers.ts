@@ -11,33 +11,28 @@ export function localesFiles(): string[] {
   return readdirSync(`${__dirname}/../../../locales`);
 }
 
-export function languageKeyboard(): any {
+export function languageKeyboard() {
   const locales = localesFiles();
   const result: any[] = [];
-  locales.forEach((locale, index) => {
-    const localeCode = locale.split('.')[0];
-    const localeName = load(
-      readFileSync(`${__dirname}/../../../locales/${locale}`, 'utf8'),
+  locales.forEach((localeFileName, index) => {
+    const localeCode = localeFileName.split('.')[0];
+    const locale = load(
+      readFileSync(`${__dirname}/../../../locales/${localeFileName}`, 'utf8'),
     );
 
-    if (
-      localeName &&
-      typeof localeName === 'object' &&
-      (localeName as any).name
-    ) {
+    if (locale && typeof locale === 'object' && 'name' in locale) {
+      const localeObj = locale as { [key: string]: string };
       if (index % 2 == 0) {
         if (index === 0) {
-          result.push([
-            m.button.callback((localeName as any).name, localeCode),
-          ]);
+          result.push([m.button.callback(localeObj.name, localeCode)]);
         } else {
           result[result.length - 1].push(
-            m.button.callback((localeName as any).name, localeCode),
+            m.button.callback(localeObj.name, localeCode),
           );
         }
       } else {
         result[result.length - 1].push(
-          m.button.callback((localeName as any).name, localeCode),
+          m.button.callback(localeObj.name, localeCode),
         );
         if (index < locales.length - 1) {
           result.push([]);
