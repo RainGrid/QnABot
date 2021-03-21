@@ -10,7 +10,7 @@ export const opSingleMenu = new MenuTemplate<TelegrafContext>(async (ctx) => {
   return '--';
 });
 
-opSingleMenu.interact((ctx) => ctx.i18n.t('delete'), 'del', {
+opSingleMenu.interact((ctx) => ctx.i18n.t('delete'), 'optdel', {
   do: async (ctx) => {
     const q = await getQuestion(ctx);
     if (q && q.options?.length && +ctx.match![3] < q.options.length) {

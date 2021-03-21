@@ -8,7 +8,7 @@ export const menu = new MenuTemplate<TelegrafContext>((ctx) =>
 );
 
 menu.chooseIntoSubmenu(
-  'q',
+  'qnare',
   async (ctx) => {
     const qs = await QuestionnareModel.find({ user: ctx.dbuser });
     return qs.map((_q, index) => index.toString());

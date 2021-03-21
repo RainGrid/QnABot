@@ -89,7 +89,6 @@ export const actionProcessPayload = async (
           ctx.scene.reenter();
           return;
         } catch (error) {
-          console.log(error);
           await ctx.reply(ctx.i18n.t('qimport_error'));
           return;
         }

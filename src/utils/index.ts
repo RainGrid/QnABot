@@ -1,5 +1,8 @@
 import { Markup, Scenes } from 'telegraf';
-import { InlineKeyboardButton } from 'telegraf/typings/telegram-types';
+import {
+  InlineKeyboardButton,
+  ReplyKeyboardMarkup,
+} from 'telegraf/typings/telegram-types';
 import { bot } from '../helpers/bot';
 import { Button, TelegrafContext } from '../types';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -25,7 +28,10 @@ export const getKeyboardRows = <
   return rows;
 };
 
-export const getDefaultMarkup = (ctx: TelegrafContext, buttons: Button[]) => {
+export const getDefaultMarkup = (
+  ctx: TelegrafContext,
+  buttons: Button[],
+): { reply_markup: ReplyKeyboardMarkup } => {
   const rows = getKeyboardRows(buttons.map((btn) => ctx.i18n.t(btn.cmd)));
   return Markup.keyboard(rows).oneTime().resize();
 };

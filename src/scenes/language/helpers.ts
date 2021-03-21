@@ -1,6 +1,8 @@
 import { readdirSync, readFileSync } from 'fs';
 import { load } from 'js-yaml';
 import { Markup as m } from 'telegraf';
+import { InlineKeyboardButton } from 'telegraf/typings/telegram-types';
+import { InlineKeyboardMarkup } from 'typegram';
 import { TelegrafContext } from '../../types';
 
 export const sendKeyboard = async (ctx: TelegrafContext): Promise<void> => {
@@ -11,9 +13,9 @@ export function localesFiles(): string[] {
   return readdirSync(`${__dirname}/../../../locales`);
 }
 
-export function languageKeyboard() {
+export function languageKeyboard(): { reply_markup: InlineKeyboardMarkup } {
   const locales = localesFiles();
-  const result: any[] = [];
+  const result: InlineKeyboardButton.CallbackButton[][] = [];
   locales.forEach((localeFileName, index) => {
     const localeCode = localeFileName.split('.')[0];
     const locale = load(

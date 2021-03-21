@@ -12,7 +12,7 @@ export const takeMenu = new MenuTemplate<TelegrafContext>((ctx) =>
 );
 
 takeMenu.choose(
-  'q',
+  'qat',
   async (ctx) => {
     const qas = await QuestionnareAttemptModel.find({
       user: ctx.dbuser,

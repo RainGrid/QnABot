@@ -57,7 +57,7 @@ export const qStatsMenu = new MenuTemplate<TelegrafContext>(async (ctx) => {
   return '';
 });
 
-qStatsMenu.choose('stP', periods, {
+qStatsMenu.choose('qnarestP', periods, {
   do: async (ctx, key) => {
     if (
       Object.values(StatisticPeriod).find((period) => period.toString() === key)
@@ -74,7 +74,7 @@ qStatsMenu.choose('stP', periods, {
   buttonText: (ctx, key) => ctx.i18n.t(key),
 });
 
-qStatsMenu.interact((ctx) => ctx.i18n.t('export'), 'qExport', {
+qStatsMenu.interact((ctx) => ctx.i18n.t('export'), 'qnarestExport', {
   joinLastRow: true,
   do: async (ctx) => {
     const q = await getQuestionnare(ctx);

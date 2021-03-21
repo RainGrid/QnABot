@@ -17,10 +17,11 @@ import {
 import { TelegrafContext } from '../../../../types';
 
 export const qaSingleMenu = new MenuTemplate<TelegrafContext>(async (ctx) => {
-  if (ctx.scene.session.data?.qaId) {
-    const qa = await QuestionnareAttemptModel.findById(
-      ctx.scene.session.data.qaId,
-    ).populate('questionnare');
+  const { data } = ctx.scene.session;
+  if (data?.qaId) {
+    const qa = await QuestionnareAttemptModel.findById(data.qaId).populate(
+      'questionnare',
+    );
     if (qa && qa.questionnare) {
       if (qa.isFinished) {
         return ctx.i18n.t('qa_finished');
@@ -38,24 +39,22 @@ export const qaSingleMenu = new MenuTemplate<TelegrafContext>(async (ctx) => {
           });
 
           if (q) {
-            ctx.scene.session.data.question = q;
+            data.question = q;
           }
         }
       } else {
         const q = await QuestionModel.findOne({
           questionnare: qa.questionnare,
         });
-        ctx.scene.session.data.question = q;
+        data.question = q;
       }
-      if (ctx.scene.session.data.question) {
+      if (data.question) {
         const response = `${qName}\n\n${
-          `${ctx.scene.session.data.question.sortOrder + 1}. ${
-            ctx.scene.session.data.question.name
-          }` +
-          (ctx.scene.session.data.question.labels?.length === 1
-            ? ' ' + ctx.scene.session.data.question.labels[0]
+          `${data.question.sortOrder + 1}. ${data.question.name}` +
+          (data.question.labels?.length === 1
+            ? ' ' + data.question.labels[0]
             : '')
-        }\n${ctx.scene.session.data.question.description || ''}`;
+        }\n${data.question.description || ''}`;
         return response;
       } else {
         qa.isFinished = true;
@@ -85,34 +84,32 @@ export const qaSingleMenu = new MenuTemplate<TelegrafContext>(async (ctx) => {
 });
 
 qaSingleMenu.choose(
-  'qa',
+  'qatopts',
   async (ctx) => {
+    const { data } = ctx.scene.session;
     if (
-      ctx.scene.session.data?.question?.options?.length &&
-      ctx.scene.session.data?.question?.type === QuestionType.Choice
+      data?.question?.options?.length &&
+      data.question.type === QuestionType.Choice
     ) {
-      return ctx.scene.session.data.question.options.map((op: string) =>
-        op.replace('/', '|'),
-      );
+      return data.question.options.map((op: string) => op.replace('/', '|'));
     }
     return [];
   },
   {
     do: async (ctx, op) => {
-      if (ctx.scene.session.data?.qaId && ctx.scene.session.data?.question) {
-        const qa = await QuestionnareAttemptModel.findById(
-          ctx.scene.session.data.qaId,
-        );
+      const { data } = ctx.scene.session;
+      if (data?.qaId && data?.question) {
+        const qa = await QuestionnareAttemptModel.findById(data.qaId);
         if (qa) {
           const an = new AnswerModel({
             answer: op,
             user: ctx.dbuser,
             attempt: qa,
-            question: ctx.scene.session.data.question,
+            question: data.question,
           });
           await an.save();
 
-          delete ctx.scene.session.data.question;
+          delete data.question;
         }
       }
 
@@ -124,28 +121,26 @@ qaSingleMenu.choose(
 );
 
 qaSingleMenu.select(
-  'qa',
+  'qatoptsmulti',
   async (ctx) => {
+    const { data } = ctx.scene.session;
     if (
-      ctx.scene.session.data?.question?.options?.length &&
-      ctx.scene.session.data?.question?.type === QuestionType.MultipleChoice
+      data?.question?.options?.length &&
+      data.question.type === QuestionType.MultipleChoice
     ) {
-      return ctx.scene.session.data.question.options.map((op: string) =>
-        op.replace('/', '|'),
-      );
+      return data.question.options.map((op: string) => op.replace('/', '|'));
     }
     return [];
   },
   {
     set: async (ctx, op, newState) => {
-      if (ctx.scene.session.data?.qaId && ctx.scene.session.data?.question) {
-        ctx.scene.session.data.selections ??= [];
+      const { data } = ctx.scene.session;
+      if (data?.qaId && data?.question) {
+        data.selections ??= [];
         if (newState) {
-          ctx.scene.session.data.selections.push(op);
+          data.selections.push(op);
         } else {
-          ctx.scene.session.data.selections = ctx.scene.session.data.selections.filter(
-            (el: string) => el !== op,
-          );
+          data.selections = data.selections.filter((el: string) => el !== op);
         }
       }
 
@@ -154,9 +149,10 @@ qaSingleMenu.select(
     },
     isSet: async (ctx, op) => {
       let isOpSet = false;
-      if (ctx.scene.session.data?.qaId && ctx.scene.session.data?.question) {
-        ctx.scene.session.data.selections ??= [];
-        isOpSet = ctx.scene.session.data.selections.includes(op);
+      const { data } = ctx.scene.session;
+      if (data?.qaId && data.question) {
+        data.selections ??= [];
+        isOpSet = data.selections.includes(op);
       }
       return isOpSet;
     },
@@ -166,36 +162,32 @@ qaSingleMenu.select(
 
 qaSingleMenu.interact(
   (ctx) => {
-    if (
-      ctx.scene.session.data?.qaId &&
-      ctx.scene.session.data?.question?.type === QuestionType.MultipleChoice
-    ) {
+    const { data } = ctx.scene.session;
+    if (data?.qaId && data.question?.type === QuestionType.MultipleChoice) {
       return ctx.i18n.t('qa_confirm');
     }
     return '';
   },
-  'qaConfirm',
+  'qatConfirm',
   {
     joinLastRow: true,
     do: async (ctx) => {
-      if (ctx.scene.session.data?.qaId && ctx.scene.session.data?.question) {
-        const qa = await QuestionnareAttemptModel.findById(
-          ctx.scene.session.data.qaId,
-        );
+      const { data } = ctx.scene.session;
+      if (data?.qaId && data.question) {
+        const qa = await QuestionnareAttemptModel.findById(data.qaId);
         if (qa) {
           const an = new AnswerModel({
-            answer: ctx.scene.session.data?.selections
-              ? ctx.scene.session.data.selections.join(', ')
-              : '-',
+            answer: data.selections ? data.selections.join(', ') : '-',
             user: ctx.dbuser,
             attempt: qa,
-            question: ctx.scene.session.data.question,
+            question: data.question,
           });
           await an.save();
 
-          if (ctx.scene.session.data?.selections) {
-            delete ctx.scene.session.data.selections;
+          if (data.selections) {
+            delete data.selections;
           }
+          delete data.question;
         }
       }
 
@@ -207,23 +199,27 @@ qaSingleMenu.interact(
 
 qaSingleMenu.interact(
   (ctx) => {
+    const { data } = ctx.scene.session;
     if (
-      ctx.scene.session.data?.qaId &&
-      (ctx.scene.session.data?.question?.type === QuestionType.Short ||
-        ctx.scene.session.data?.question?.type === QuestionType.Paragraph)
+      data?.qaId &&
+      data.question &&
+      (data.question.type === QuestionType.Short ||
+        data.question.type === QuestionType.Paragraph)
     ) {
       return ctx.i18n.t('qa_answer_btn');
     }
     return '';
   },
-  'qaAnswer',
+  'qatAnswer',
   {
     do: async (ctx) => {
-      ctx.scene.session.data ??= {};
-      ctx.scene.session.data.answerRequired = true;
-      await ctx.deleteMessage();
-      const msg = await ctx.reply(ctx.i18n.t('qa_answer_req'));
-      ctx.scene.session.data.answerReqMsg = msg.message_id;
+      const { data } = ctx.scene.session;
+      if (data?.qaId && data.question) {
+        data.answerRequired = true;
+        await ctx.deleteMessage();
+        const msg = await ctx.reply(ctx.i18n.t('qa_answer_req'));
+        data.answerReqMsg = msg.message_id;
+      }
 
       await ctx.answerCbQuery();
       return false;
@@ -233,36 +229,28 @@ qaSingleMenu.interact(
 
 qaSingleMenu.interact(
   (ctx) => {
-    if (
-      ctx.scene.session.data?.qaId &&
-      ctx.scene.session.data?.question &&
-      !ctx.scene.session.data?.question?.isRequired
-    ) {
+    const { data } = ctx.scene.session;
+    if (data?.qaId && data.question && !data.question.isRequired) {
       return ctx.i18n.t('qa_skip');
     }
     return '';
   },
-  'qaSkip',
+  'qatSkip',
   {
     do: async (ctx) => {
-      if (
-        ctx.scene.session.data?.qaId &&
-        ctx.scene.session.data?.question &&
-        !ctx.scene.session.data?.question?.isRequired
-      ) {
-        const qa = await QuestionnareAttemptModel.findById(
-          ctx.scene.session.data.qaId,
-        );
+      const { data } = ctx.scene.session;
+      if (data?.qaId && data.question && !data.question.isRequired) {
+        const qa = await QuestionnareAttemptModel.findById(data.qaId);
         if (qa) {
           const an = new AnswerModel({
             answer: '-',
             user: ctx.dbuser,
             attempt: qa,
-            question: ctx.scene.session.data.question,
+            question: data.question,
           });
           await an.save();
 
-          delete ctx.scene.session.data.question;
+          delete data.question;
         }
       }
 
@@ -272,7 +260,7 @@ qaSingleMenu.interact(
   },
 );
 
-qaSingleMenu.interact((ctx) => ctx.i18n.t('close'), 'qaClose', {
+qaSingleMenu.interact((ctx) => ctx.i18n.t('close'), 'qatClose', {
   do: async (ctx) => {
     await ctx.deleteMessage();
     await replyMenuToContext(takeMenu, ctx, 'qasmenu/');
@@ -285,30 +273,25 @@ qaSingleMenu.interact((ctx) => ctx.i18n.t('close'), 'qaClose', {
 export const actionHandleAnswer = async (
   ctx: TelegrafContext,
 ): Promise<void> => {
-  if (
-    ctx.scene.session.data?.answerRequired &&
-    ctx.message &&
-    'text' in ctx.message
-  ) {
+  const { data } = ctx.scene.session;
+  if (data?.answerRequired && ctx.message && 'text' in ctx.message) {
     const answer = ctx.message.text;
-    if (ctx.scene.session.data?.qaId && ctx.scene.session.data?.question) {
-      const qa = await QuestionnareAttemptModel.findById(
-        ctx.scene.session.data.qaId,
-      );
+    if (data.qaId && data.question) {
+      const qa = await QuestionnareAttemptModel.findById(data.qaId);
       if (qa) {
         const an = new AnswerModel({
           answer,
           user: ctx.dbuser,
           attempt: qa,
-          question: ctx.scene.session.data.question,
+          question: data.question,
         });
         await an.save();
 
         await ctx.deleteMessage();
-        await ctx.deleteMessage(ctx.scene.session.data.answerReqMsg);
-        delete ctx.scene.session.data.answerRequired;
-        delete ctx.scene.session.data.question;
-        delete ctx.scene.session.data.answerReqMsg;
+        await ctx.deleteMessage(data.answerReqMsg);
+        delete data.answerRequired;
+        delete data.question;
+        delete data.answerReqMsg;
 
         await replyMenuToContext(qaSingleMenu, ctx, 'qamenu/');
       }

@@ -8,7 +8,7 @@ export const typeListMenu = new MenuTemplate<TelegrafContext>((ctx) => {
 });
 
 typeListMenu.choose(
-  'op',
+  'typ',
   async () => {
     return Object.values(QuestionType)
       .filter((value) => !isNaN(Number(value)))

@@ -2,26 +2,23 @@ import {
   createBackMainMenuButtons,
   getMenuOfPath,
   MenuTemplate,
-  replyMenuToContext,
 } from 'telegraf-inline-menu';
 import TelegrafStatelessQuestion from 'telegraf-stateless-question';
+import { menuMiddleware } from '.';
 import { QuestionModel, QuestionType } from '../../../models';
 import { TelegrafContext } from '../../../types';
 import { sendMainKeyboard } from '../helpers';
 import { getQuestion, getQuestionnare } from './helpers';
 import { quSingleMenu } from './quSingle';
 
-const qRegex = new RegExp('/q:(.*)/qus/$');
+const qRegex = new RegExp('/qnare:(.*)/qus/$');
 
-export const quListMenu = new MenuTemplate<TelegrafContext>((ctx, path) => {
-  if (!ctx.match) {
-    ctx.match = qRegex.exec(path) || undefined;
-  }
+export const quListMenu = new MenuTemplate<TelegrafContext>((ctx) => {
   return ctx.i18n.t('questions');
 });
 
 quListMenu.chooseIntoSubmenu(
-  'qu',
+  'qstion',
   async (ctx) => {
     const q = await getQuestionnare(ctx);
     if (q) {
@@ -43,15 +40,17 @@ quListMenu.chooseIntoSubmenu(
   },
 );
 
-quListMenu.interact((ctx) => ctx.i18n.t('add_new'), 'quEditName', {
+quListMenu.interact((ctx) => ctx.i18n.t('add_new'), 'quAddName', {
   do: async (ctx, path) => {
     const additionalState = getMenuOfPath(path);
+
     await quNewName.replyWithMarkdown(
       ctx,
       ctx.i18n.t('add_new_req'),
       additionalState,
     );
-    return true;
+
+    return false;
   },
 });
 
@@ -63,7 +62,7 @@ quListMenu.manualRow(
 );
 
 export const quNewName = new TelegrafStatelessQuestion<TelegrafContext>(
-  'quName',
+  'quNewName',
   async (ctx, path) => {
     if ('text' in ctx.message) {
       const answer = ctx.message.text;
@@ -83,8 +82,8 @@ export const quNewName = new TelegrafStatelessQuestion<TelegrafContext>(
           await qu.save();
         }
       }
-      await replyMenuToContext(quListMenu, ctx, path);
       await sendMainKeyboard(ctx);
+      await menuMiddleware.replyToContext(ctx, path);
     }
   },
 );

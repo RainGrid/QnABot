@@ -2,9 +2,9 @@ import {
   createBackMainMenuButtons,
   getMenuOfPath,
   MenuTemplate,
-  replyMenuToContext,
 } from 'telegraf-inline-menu';
 import TelegrafStatelessQuestion from 'telegraf-stateless-question';
+import { menuMiddleware } from '.';
 import { QuestionType } from '../../../models';
 import { TelegrafContext } from '../../../types';
 import { sendMainKeyboard } from '../helpers';
@@ -12,22 +12,17 @@ import { getQuestion } from './helpers';
 import { opListMenu } from './opList';
 import { typeListMenu } from './typeList';
 
-const qRegex = new RegExp('/q:(.*)/qus/qu:(.*)/$');
+const qRegex = new RegExp('/qnare:(.*)/qus/qstion:(.*)/$');
 
-export const quSingleMenu = new MenuTemplate<TelegrafContext>(
-  async (ctx, path) => {
-    if (!ctx.match) {
-      ctx.match = qRegex.exec(path) || undefined;
-    }
-    const qu = await getQuestion(ctx);
-    if (qu) {
-      return `${qu.name}\n${ctx.i18n.t('type')}: ${ctx.i18n.t(
-        'type' + qu.type.toString(),
-      )}\n${qu.description || ''}`;
-    }
-    return '--';
-  },
-);
+export const quSingleMenu = new MenuTemplate<TelegrafContext>(async (ctx) => {
+  const qu = await getQuestion(ctx);
+  if (qu) {
+    return `${qu.name}\n${ctx.i18n.t('type')}: ${ctx.i18n.t(
+      'type' + qu.type.toString(),
+    )}\n${qu.description || ''}`;
+  }
+  return '--';
+});
 
 quSingleMenu.submenu(
   async (ctx) => {
@@ -69,7 +64,7 @@ quSingleMenu.interact((ctx) => ctx.i18n.t('edit_descr'), 'quEditDescr', {
   },
 });
 
-quSingleMenu.toggle((ctx) => ctx.i18n.t('qurequired'), 'req', {
+quSingleMenu.toggle((ctx) => ctx.i18n.t('qurequired'), 'qureq', {
   set: async (ctx, choice) => {
     const qu = await getQuestion(ctx);
     if (qu) {
@@ -87,9 +82,9 @@ quSingleMenu.toggle((ctx) => ctx.i18n.t('qurequired'), 'req', {
   },
 });
 
-quSingleMenu.submenu((ctx) => ctx.i18n.t('type'), 'type', typeListMenu);
+quSingleMenu.submenu((ctx) => ctx.i18n.t('type'), 'qutype', typeListMenu);
 
-quSingleMenu.interact((ctx) => ctx.i18n.t('delete'), 'del', {
+quSingleMenu.interact((ctx) => ctx.i18n.t('delete'), 'qudel', {
   joinLastRow: true,
   do: async (ctx) => {
     const qu = await getQuestion(ctx);
@@ -121,7 +116,7 @@ export const quName = new TelegrafStatelessQuestion<TelegrafContext>(
         }
       }
       await sendMainKeyboard(ctx);
-      await replyMenuToContext(quSingleMenu, ctx, path);
+      await menuMiddleware.replyToContext(ctx, path);
     }
   },
 );
@@ -140,7 +135,7 @@ export const quDescr = new TelegrafStatelessQuestion<TelegrafContext>(
         }
       }
       await sendMainKeyboard(ctx);
-      await replyMenuToContext(quSingleMenu, ctx, path);
+      await menuMiddleware.replyToContext(ctx, path);
     }
   },
 );

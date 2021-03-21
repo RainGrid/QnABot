@@ -2,31 +2,26 @@ import {
   createBackMainMenuButtons,
   getMenuOfPath,
   MenuTemplate,
-  replyMenuToContext,
 } from 'telegraf-inline-menu';
 import TelegrafStatelessQuestion from 'telegraf-stateless-question';
+import { menuMiddleware } from '.';
 import { TelegrafContext } from '../../../types';
 import { sendMainKeyboard } from '../helpers';
 import { getQuestionnare } from './helpers';
 import { qStatsMenu } from './qStats';
 import { quListMenu } from './quList';
 
-const qRegex = new RegExp('/q:(.*)/$');
+const qRegex = new RegExp('/qnare:(.*)/$');
 
-export const qSingleMenu = new MenuTemplate<TelegrafContext>(
-  async (ctx, path) => {
-    if (!ctx.match) {
-      ctx.match = qRegex.exec(path) || undefined;
-    }
-    const q = await getQuestionnare(ctx);
-    if (q) {
-      return `${q.name}\n${
-        q.description || 'no description'
-      }\n\n${ctx.i18n.t('qlink', { qId: q._id.toString() })}`;
-    }
-    return '';
-  },
-);
+export const qSingleMenu = new MenuTemplate<TelegrafContext>(async (ctx) => {
+  const q = await getQuestionnare(ctx);
+  if (q) {
+    return `${q.name}\n${
+      q.description || 'no description'
+    }\n\n${ctx.i18n.t('qlink', { qId: q._id.toString() })}`;
+  }
+  return '';
+});
 
 qSingleMenu.submenu((ctx) => ctx.i18n.t('questions'), 'qus', quListMenu);
 
@@ -55,7 +50,7 @@ qSingleMenu.interact((ctx) => ctx.i18n.t('edit_descr'), 'qEditDescr', {
   },
 });
 
-qSingleMenu.toggle((ctx) => ctx.i18n.t('qenabled'), 'en', {
+qSingleMenu.toggle((ctx) => ctx.i18n.t('qenabled'), 'qen', {
   set: async (ctx, choice) => {
     const q = await getQuestionnare(ctx);
     if (q) {
@@ -73,7 +68,7 @@ qSingleMenu.toggle((ctx) => ctx.i18n.t('qenabled'), 'en', {
   },
 });
 
-qSingleMenu.toggle((ctx) => ctx.i18n.t('qnotifications'), 'not', {
+qSingleMenu.toggle((ctx) => ctx.i18n.t('qnotifications'), 'qnot', {
   joinLastRow: true,
   set: async (ctx, choice) => {
     const q = await getQuestionnare(ctx);
@@ -92,9 +87,9 @@ qSingleMenu.toggle((ctx) => ctx.i18n.t('qnotifications'), 'not', {
   },
 });
 
-qSingleMenu.submenu((ctx) => ctx.i18n.t('qstats'), 'st', qStatsMenu);
+qSingleMenu.submenu((ctx) => ctx.i18n.t('qstats'), 'qnarest', qStatsMenu);
 
-qSingleMenu.interact((ctx) => ctx.i18n.t('delete'), 'del', {
+qSingleMenu.interact((ctx) => ctx.i18n.t('delete'), 'qdel', {
   do: async (ctx) => {
     const q = await getQuestionnare(ctx);
     if (q) {
@@ -126,7 +121,7 @@ export const qName = new TelegrafStatelessQuestion<TelegrafContext>(
         }
       }
       await sendMainKeyboard(ctx);
-      await replyMenuToContext(qSingleMenu, ctx, path);
+      await menuMiddleware.replyToContext(ctx, path);
     }
   },
 );
@@ -147,7 +142,7 @@ export const qDescr = new TelegrafStatelessQuestion<TelegrafContext>(
         }
       }
       await sendMainKeyboard(ctx);
-      await replyMenuToContext(qSingleMenu, ctx, path);
+      await menuMiddleware.replyToContext(ctx, path);
     }
   },
 );
