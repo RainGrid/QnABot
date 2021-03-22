@@ -44,7 +44,7 @@ opListMenu.interact((ctx) => ctx.i18n.t('add_new'), 'optAddName', {
 
     await optNewName.replyWithMarkdown(
       ctx,
-      ctx.i18n.t('add_new_req'),
+      ctx.i18n.t('add_new_op_req'),
       additionalState,
     );
 

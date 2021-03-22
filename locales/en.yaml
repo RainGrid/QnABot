@@ -67,8 +67,11 @@ type1: Paragraph
 type2: Select
 type3: Multiselect
 
+add_new_op_req: Enter the answer. If you want user to be able to create a custom answer, enter 'any'.
+
 qa_answer_btn: Enter answer
 qa_answer_req: Please enter the answer
 qa_finished: The attempt is finished
 qa_skip: Skip
 qa_confirm: Confirm
+qa_custom: Other

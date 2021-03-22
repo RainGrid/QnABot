@@ -28,26 +28,28 @@ export const qaSingleMenu = new MenuTemplate<TelegrafContext>(async (ctx) => {
       }
 
       const qName = (qa.questionnare as Questionnare).name;
-      const ans = await AnswerModel.find({ attempt: qa }).populate('question');
 
-      if (ans.length) {
-        const an = ans.pop();
-        if (an?.question) {
-          const q = await QuestionModel.findOne({
-            questionnare: qa.questionnare,
-            sortOrder: { $gt: (an.question as Question).sortOrder },
-          });
-
-          if (q) {
+      if (!data.question) {
+        const ans = await AnswerModel.find({ attempt: qa }).populate(
+          'question',
+        );
+        if (ans.length) {
+          const an = ans[ans.length - 1];
+          if (an.question) {
+            const q = await QuestionModel.findOne({
+              questionnare: qa.questionnare,
+              sortOrder: { $gt: (an.question as Question).sortOrder },
+            });
             data.question = q;
           }
+        } else {
+          const q = await QuestionModel.findOne({
+            questionnare: qa.questionnare,
+          });
+          data.question = q;
         }
-      } else {
-        const q = await QuestionModel.findOne({
-          questionnare: qa.questionnare,
-        });
-        data.question = q;
       }
+
       if (data.question) {
         const response = `${qName}\n\n${`${data.question.sortOrder + 1}. ${
           data.question.name
@@ -88,7 +90,9 @@ qaSingleMenu.choose(
       data?.question?.options?.length &&
       data.question.type === QuestionType.Choice
     ) {
-      return data.question.options.map((op: string) => op.replace('/', '|'));
+      return data.question.options
+        .filter((op: string) => op !== 'any')
+        .map((op: string) => op.replace('/', '|'));
     }
     return [];
   },
@@ -111,7 +115,7 @@ qaSingleMenu.choose(
       }
 
       await ctx.answerCbQuery();
-      return '.';
+      return true;
     },
     columns: 2,
   },
@@ -125,7 +129,9 @@ qaSingleMenu.select(
       data?.question?.options?.length &&
       data.question.type === QuestionType.MultipleChoice
     ) {
-      return data.question.options.map((op: string) => op.replace('/', '|'));
+      return data.question.options
+        .filter((op: string) => op !== 'any')
+        .map((op: string) => op.replace('/', '|'));
     }
     return [];
   },
@@ -154,6 +160,36 @@ qaSingleMenu.select(
       return isOpSet;
     },
     columns: 2,
+  },
+);
+
+qaSingleMenu.interact(
+  (ctx) => {
+    const { data } = ctx.scene.session;
+    if (
+      data?.question?.options?.length &&
+      (data.question.type === QuestionType.MultipleChoice ||
+        data.question.type === QuestionType.Choice)
+    ) {
+      return ctx.i18n.t('qa_custom');
+    }
+    return '';
+  },
+  'qatCustom',
+  {
+    joinLastRow: true,
+    do: async (ctx) => {
+      const { data } = ctx.scene.session;
+      if (data?.qaId && data.question) {
+        data.answerRequired = true;
+        await ctx.deleteMessage();
+        const msg = await ctx.reply(ctx.i18n.t('qa_answer_req'));
+        data.answerReqMsg = msg.message_id;
+      }
+
+      await ctx.answerCbQuery();
+      return false;
+    },
   },
 );
 
@@ -274,24 +310,35 @@ export const actionHandleAnswer = async (
   if (data?.answerRequired && ctx.message && 'text' in ctx.message) {
     const answer = ctx.message.text;
     if (data.qaId && data.question) {
-      const qa = await QuestionnareAttemptModel.findById(data.qaId);
-      if (qa) {
-        const an = new AnswerModel({
-          answer,
-          user: ctx.dbuser,
-          attempt: qa,
-          question: data.question,
-        });
-        await an.save();
-
-        await ctx.deleteMessage();
-        await ctx.deleteMessage(data.answerReqMsg);
-        delete data.answerRequired;
-        delete data.question;
-        delete data.answerReqMsg;
-
-        await replyMenuToContext(qaSingleMenu, ctx, 'qamenu/');
+      if (
+        data.question.type === QuestionType.Short ||
+        data.question.type === QuestionType.Paragraph ||
+        data.question.type === QuestionType.Choice
+      ) {
+        const qa = await QuestionnareAttemptModel.findById(data.qaId);
+        if (qa) {
+          const an = new AnswerModel({
+            answer,
+            user: ctx.dbuser,
+            attempt: qa,
+            question: data.question,
+          });
+          await an.save();
+          delete data.question;
+        }
+      } else if (data.question.type === QuestionType.MultipleChoice) {
+        data.selections ??= [];
+        data.selections.push(answer);
+        data.question.options.push(answer);
       }
+
+      await ctx.deleteMessage();
+      await ctx.deleteMessage(data.answerReqMsg);
+
+      delete data.answerRequired;
+      delete data.answerReqMsg;
+
+      await replyMenuToContext(qaSingleMenu, ctx, 'qamenu/');
     }
   }
 };
