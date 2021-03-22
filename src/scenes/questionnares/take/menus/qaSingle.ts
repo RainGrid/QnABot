@@ -49,12 +49,9 @@ export const qaSingleMenu = new MenuTemplate<TelegrafContext>(async (ctx) => {
         data.question = q;
       }
       if (data.question) {
-        const response = `${qName}\n\n${
-          `${data.question.sortOrder + 1}. ${data.question.name}` +
-          (data.question.labels?.length === 1
-            ? ' ' + data.question.labels[0]
-            : '')
-        }\n${data.question.description || ''}`;
+        const response = `${qName}\n\n${`${data.question.sortOrder + 1}. ${
+          data.question.name
+        }`}\n${data.question.description || ''}`;
         return response;
       } else {
         qa.isFinished = true;

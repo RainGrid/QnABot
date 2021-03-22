@@ -72,7 +72,7 @@ export const actionProcessPayload = async (
                 row[1]?.map((el: string[]) => el[0] || 'any') || undefined;
               const qLabels = row[3] || undefined;
               const question = new QuestionModel({
-                name: qName,
+                name: qName + (qLabels?.length === 1 ? ` ${qLabels[0]}` : ''),
                 description: qDescr,
                 type: qType,
                 questionnare: q,
