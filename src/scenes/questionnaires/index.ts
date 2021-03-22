@@ -9,7 +9,7 @@ import { qDescr, qName } from './menus/qSingle';
 import { quNewName } from './menus/quList';
 import { quDescr, quName } from './menus/quSingle';
 
-const scene = new Scenes.BaseScene<TelegrafContext>('questionnares');
+const scene = new Scenes.BaseScene<TelegrafContext>('questionnaires');
 
 scene.enter(async (ctx: TelegrafContext) => {
   await sendMainKeyboard(ctx);

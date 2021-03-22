@@ -1,9 +1,9 @@
 import { DocumentType } from '@typegoose/typegoose';
 import { isValidObjectId, Types } from 'mongoose';
 import {
-  QuestionnareAttempt,
-  QuestionnareAttemptModel,
-  QuestionnareModel,
+  QuestionnaireAttempt,
+  QuestionnaireAttemptModel,
+  QuestionnaireModel,
 } from '../../../models';
 import { Button, TelegrafContext } from '../../../types';
 import { enterScene, getDefaultMarkup } from '../../../utils';
@@ -16,7 +16,7 @@ export const buttons: Button[] = [
   },
   {
     cmd: 'back',
-    cb: enterScene('questionnares'),
+    cb: enterScene('questionnaires'),
   },
 ];
 
@@ -27,13 +27,13 @@ export const sendMainKeyboard = async (ctx: TelegrafContext): Promise<void> => {
 export const getOrCreateAttemptById = async (
   ctx: TelegrafContext,
   id: string | Types.ObjectId,
-): Promise<DocumentType<QuestionnareAttempt> | void> => {
+): Promise<DocumentType<QuestionnaireAttempt> | void> => {
   if (!isValidObjectId(id)) {
     await ctx.reply(ctx.i18n.t('qtake_wrong_code'));
     return;
   }
 
-  const q = await QuestionnareModel.findById(id);
+  const q = await QuestionnaireModel.findById(id);
   if (!q) {
     await ctx.reply(ctx.i18n.t('qtake_wrong_code'));
     return;
@@ -44,13 +44,13 @@ export const getOrCreateAttemptById = async (
     return;
   }
 
-  let qa = await QuestionnareAttemptModel.findOne({
-    questionnare: q,
+  let qa = await QuestionnaireAttemptModel.findOne({
+    questionnaire: q,
     user: ctx.dbuser,
   });
   if (!qa) {
-    qa = new QuestionnareAttemptModel({
-      questionnare: q,
+    qa = new QuestionnaireAttemptModel({
+      questionnaire: q,
       user: ctx.dbuser,
       isFinished: false,
     });

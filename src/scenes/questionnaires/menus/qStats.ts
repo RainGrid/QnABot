@@ -5,11 +5,11 @@ import { createBackMainMenuButtons, MenuTemplate } from 'telegraf-inline-menu';
 import {
   Answer,
   QuestionModel,
-  QuestionnareAttempt,
-  QuestionnareAttemptModel,
+  QuestionnaireAttempt,
+  QuestionnaireAttemptModel,
 } from '../../../models';
 import { TelegrafContext } from '../../../types';
-import { getQuestionnare } from './helpers';
+import { getQuestionnaire } from './helpers';
 import fs = require('fs');
 
 enum StatisticPeriod {
@@ -32,15 +32,15 @@ async function getStats(
   ctx: TelegrafContext,
   period: StatisticPeriod,
 ): Promise<string | void> {
-  const q = await getQuestionnare(ctx);
+  const q = await getQuestionnaire(ctx);
   if (q) {
-    const query: MongooseFilterQuery<DocumentType<QuestionnareAttempt>> = {
-      questionnare: q,
+    const query: MongooseFilterQuery<DocumentType<QuestionnaireAttempt>> = {
+      questionnaire: q,
     };
     if (period !== StatisticPeriod.AllTime) {
       query.createdAt = { $gte: dayjs().subtract(1, period).toDate() };
     }
-    const attempts = await QuestionnareAttemptModel.find(query);
+    const attempts = await QuestionnaireAttemptModel.find(query);
     return ctx.i18n.t('qstats_count', {
       period: ctx.i18n.t(period).toLowerCase(),
       commonCount: attempts.length,
@@ -50,7 +50,7 @@ async function getStats(
 }
 
 export const qStatsMenu = new MenuTemplate<TelegrafContext>(async (ctx) => {
-  const q = await getQuestionnare(ctx);
+  const q = await getQuestionnaire(ctx);
   if (q) {
     return `${q.name} statistics`;
   }
@@ -77,13 +77,13 @@ qStatsMenu.choose('qnarestP', periods, {
 qStatsMenu.interact((ctx) => ctx.i18n.t('export'), 'qnarestExport', {
   joinLastRow: true,
   do: async (ctx) => {
-    const q = await getQuestionnare(ctx);
+    const q = await getQuestionnaire(ctx);
     if (q) {
-      const answers = await QuestionnareAttemptModel.aggregate<
-        QuestionnareAttempt & { answers: Answer[] }
+      const answers = await QuestionnaireAttemptModel.aggregate<
+        QuestionnaireAttempt & { answers: Answer[] }
       >([
         {
-          $match: { questionnare: q._id, isFinished: true },
+          $match: { questionnaire: q._id, isFinished: true },
         },
         {
           $lookup: {
@@ -94,7 +94,7 @@ qStatsMenu.interact((ctx) => ctx.i18n.t('export'), 'qnarestExport', {
           },
         },
       ]);
-      const questions = await QuestionModel.find({ questionnare: q }).sort({
+      const questions = await QuestionModel.find({ questionnaire: q }).sort({
         sortOrder: 1,
       });
       const header =

@@ -4,7 +4,7 @@ import { enterScene, getDefaultMarkup } from '../../../utils';
 export const buttons: Button[] = [
   {
     cmd: 'back',
-    cb: enterScene('questionnares'),
+    cb: enterScene('questionnaires'),
   },
 ];
 

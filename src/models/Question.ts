@@ -8,7 +8,7 @@ import {
 } from '@typegoose/typegoose';
 import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 import { AnswerModel } from './Answer';
-import { Questionnare } from './Questionnare';
+import { Questionnaire } from './Questionnaire';
 
 export enum QuestionType {
   Short,
@@ -65,8 +65,8 @@ export class Question extends TimeStamps {
   @prop({ required: true, default: 0 })
   sortOrder!: number;
 
-  @prop({ required: true, ref: Questionnare })
-  questionnare!: Ref<Questionnare>;
+  @prop({ required: true, ref: Questionnaire })
+  questionnaire!: Ref<Questionnaire>;
 }
 
 // Get Question model

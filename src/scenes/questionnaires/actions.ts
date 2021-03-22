@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { parse } from 'node-html-parser';
-import { QuestionModel, QuestionnareModel, QuestionType } from '../../models';
+import { QuestionModel, QuestionnaireModel, QuestionType } from '../../models';
 import { TelegrafContext } from '../../types';
 
 export const actionImport = async (ctx: TelegrafContext): Promise<void> => {
@@ -51,7 +51,7 @@ export const actionProcessPayload = async (
           const formDescr = formData[0];
           const fieldsData = formData[1];
 
-          const q = new QuestionnareModel({
+          const q = new QuestionnaireModel({
             name: formTitle,
             description: formDescr,
             isEnabled: false,
@@ -75,7 +75,7 @@ export const actionProcessPayload = async (
                 name: qName + (qLabels?.length === 1 ? ` ${qLabels[0]}` : ''),
                 description: qDescr,
                 type: qType,
-                questionnare: q,
+                questionnaire: q,
                 isRequired: qRequired,
                 options: qOptions,
                 labels: qLabels,

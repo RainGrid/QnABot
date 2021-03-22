@@ -4,7 +4,7 @@ import { attachButtons, defaultSceneData } from '../../../utils';
 import { actionProcessPayload } from './actions';
 import { buttons, sendKeyboard } from './helpers';
 
-const scene = new Scenes.BaseScene<TelegrafContext>('questionnare_new');
+const scene = new Scenes.BaseScene<TelegrafContext>('questionnaire_new');
 
 scene.use(defaultSceneData);
 

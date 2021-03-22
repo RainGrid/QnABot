@@ -9,8 +9,8 @@ import {
   AnswerModel,
   Question,
   QuestionModel,
-  Questionnare,
-  QuestionnareAttemptModel,
+  Questionnaire,
+  QuestionnaireAttemptModel,
   QuestionType,
   UserModel,
 } from '../../../../models';
@@ -19,15 +19,15 @@ import { TelegrafContext } from '../../../../types';
 export const qaSingleMenu = new MenuTemplate<TelegrafContext>(async (ctx) => {
   const { data } = ctx.scene.session;
   if (data?.qaId) {
-    const qa = await QuestionnareAttemptModel.findById(data.qaId).populate(
-      'questionnare',
+    const qa = await QuestionnaireAttemptModel.findById(data.qaId).populate(
+      'questionnaire',
     );
-    if (qa && qa.questionnare) {
+    if (qa && qa.questionnaire) {
       if (qa.isFinished) {
         return ctx.i18n.t('qa_finished');
       }
 
-      const qName = (qa.questionnare as Questionnare).name;
+      const qName = (qa.questionnaire as Questionnaire).name;
 
       if (!data.question) {
         const ans = await AnswerModel.find({ attempt: qa }).populate(
@@ -37,14 +37,14 @@ export const qaSingleMenu = new MenuTemplate<TelegrafContext>(async (ctx) => {
           const an = ans[ans.length - 1];
           if (an.question) {
             const q = await QuestionModel.findOne({
-              questionnare: qa.questionnare,
+              questionnaire: qa.questionnaire,
               sortOrder: { $gt: (an.question as Question).sortOrder },
             });
             data.question = q;
           }
         } else {
           const q = await QuestionModel.findOne({
-            questionnare: qa.questionnare,
+            questionnaire: qa.questionnaire,
           });
           data.question = q;
         }
@@ -59,16 +59,16 @@ export const qaSingleMenu = new MenuTemplate<TelegrafContext>(async (ctx) => {
         qa.isFinished = true;
         await qa.save();
 
-        if ((qa.questionnare as Questionnare).isNotificationsEnabled) {
+        if ((qa.questionnaire as Questionnaire).isNotificationsEnabled) {
           const owner = await UserModel.findById(
-            (qa.questionnare as Questionnare).user,
+            (qa.questionnaire as Questionnaire).user,
           );
           if (owner) {
             try {
               await bot.telegram.sendMessage(
                 owner.id,
                 ctx.i18n.t('qanotification', {
-                  qName: (qa.questionnare as Questionnare).name,
+                  qName: (qa.questionnaire as Questionnaire).name,
                 }),
               );
             } catch (error) {}
@@ -100,7 +100,7 @@ qaSingleMenu.choose(
     do: async (ctx, op) => {
       const { data } = ctx.scene.session;
       if (data?.qaId && data?.question) {
-        const qa = await QuestionnareAttemptModel.findById(data.qaId);
+        const qa = await QuestionnaireAttemptModel.findById(data.qaId);
         if (qa) {
           const an = new AnswerModel({
             answer: op,
@@ -207,7 +207,7 @@ qaSingleMenu.interact(
     do: async (ctx) => {
       const { data } = ctx.scene.session;
       if (data?.qaId && data.question) {
-        const qa = await QuestionnareAttemptModel.findById(data.qaId);
+        const qa = await QuestionnaireAttemptModel.findById(data.qaId);
         if (qa) {
           const an = new AnswerModel({
             answer: data.selections ? data.selections.join(', ') : '-',
@@ -273,7 +273,7 @@ qaSingleMenu.interact(
     do: async (ctx) => {
       const { data } = ctx.scene.session;
       if (data?.qaId && data.question && !data.question.isRequired) {
-        const qa = await QuestionnareAttemptModel.findById(data.qaId);
+        const qa = await QuestionnaireAttemptModel.findById(data.qaId);
         if (qa) {
           const an = new AnswerModel({
             answer: '-',
@@ -315,7 +315,7 @@ export const actionHandleAnswer = async (
         data.question.type === QuestionType.Paragraph ||
         data.question.type === QuestionType.Choice
       ) {
-        const qa = await QuestionnareAttemptModel.findById(data.qaId);
+        const qa = await QuestionnaireAttemptModel.findById(data.qaId);
         if (qa) {
           const an = new AnswerModel({
             answer,

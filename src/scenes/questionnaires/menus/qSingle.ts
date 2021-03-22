@@ -7,14 +7,14 @@ import TelegrafStatelessQuestion from 'telegraf-stateless-question';
 import { menuMiddleware } from '.';
 import { TelegrafContext } from '../../../types';
 import { sendMainKeyboard } from '../helpers';
-import { getQuestionnare } from './helpers';
+import { getQuestionnaire } from './helpers';
 import { qStatsMenu } from './qStats';
 import { quListMenu } from './quList';
 
 const qRegex = new RegExp('/qnare:(.*)/$');
 
 export const qSingleMenu = new MenuTemplate<TelegrafContext>(async (ctx) => {
-  const q = await getQuestionnare(ctx);
+  const q = await getQuestionnaire(ctx);
   if (q) {
     return `${q.name}\n${
       q.description || 'no description'
@@ -52,7 +52,7 @@ qSingleMenu.interact((ctx) => ctx.i18n.t('edit_descr'), 'qEditDescr', {
 
 qSingleMenu.toggle((ctx) => ctx.i18n.t('qenabled'), 'qen', {
   set: async (ctx, choice) => {
-    const q = await getQuestionnare(ctx);
+    const q = await getQuestionnaire(ctx);
     if (q) {
       q.isEnabled = choice;
       await q.save();
@@ -60,7 +60,7 @@ qSingleMenu.toggle((ctx) => ctx.i18n.t('qenabled'), 'qen', {
     return true;
   },
   isSet: async (ctx) => {
-    const q = await getQuestionnare(ctx);
+    const q = await getQuestionnaire(ctx);
     if (q) {
       return q.isEnabled;
     }
@@ -71,7 +71,7 @@ qSingleMenu.toggle((ctx) => ctx.i18n.t('qenabled'), 'qen', {
 qSingleMenu.toggle((ctx) => ctx.i18n.t('qnotifications'), 'qnot', {
   joinLastRow: true,
   set: async (ctx, choice) => {
-    const q = await getQuestionnare(ctx);
+    const q = await getQuestionnaire(ctx);
     if (q) {
       q.isNotificationsEnabled = choice;
       await q.save();
@@ -79,7 +79,7 @@ qSingleMenu.toggle((ctx) => ctx.i18n.t('qnotifications'), 'qnot', {
     return true;
   },
   isSet: async (ctx) => {
-    const q = await getQuestionnare(ctx);
+    const q = await getQuestionnaire(ctx);
     if (q) {
       return q.isNotificationsEnabled;
     }
@@ -91,7 +91,7 @@ qSingleMenu.submenu((ctx) => ctx.i18n.t('qstats'), 'qnarest', qStatsMenu);
 
 qSingleMenu.interact((ctx) => ctx.i18n.t('delete'), 'qdel', {
   do: async (ctx) => {
-    const q = await getQuestionnare(ctx);
+    const q = await getQuestionnaire(ctx);
     if (q) {
       await q.remove();
     }
@@ -114,7 +114,7 @@ export const qName = new TelegrafStatelessQuestion<TelegrafContext>(
       const parts = path.match(qRegex);
       if (parts && parts[1]) {
         const id = parts[1];
-        const q = await getQuestionnare(ctx, +id);
+        const q = await getQuestionnaire(ctx, +id);
         if (q) {
           q.name = answer;
           await q.save();
@@ -135,7 +135,7 @@ export const qDescr = new TelegrafStatelessQuestion<TelegrafContext>(
 
       if (parts && parts[1]) {
         const id = parts[1];
-        const q = await getQuestionnare(ctx, +id);
+        const q = await getQuestionnaire(ctx, +id);
         if (q) {
           q.description = answer;
           await q.save();

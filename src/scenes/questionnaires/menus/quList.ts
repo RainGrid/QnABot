@@ -8,7 +8,7 @@ import { menuMiddleware } from '.';
 import { QuestionModel, QuestionType } from '../../../models';
 import { TelegrafContext } from '../../../types';
 import { sendMainKeyboard } from '../helpers';
-import { getQuestion, getQuestionnare } from './helpers';
+import { getQuestion, getQuestionnaire } from './helpers';
 import { quSingleMenu } from './quSingle';
 
 const qRegex = new RegExp('/qnare:(.*)/qus/$');
@@ -20,9 +20,9 @@ export const quListMenu = new MenuTemplate<TelegrafContext>((ctx) => {
 quListMenu.chooseIntoSubmenu(
   'qstion',
   async (ctx) => {
-    const q = await getQuestionnare(ctx);
+    const q = await getQuestionnaire(ctx);
     if (q) {
-      const qs = await QuestionModel.find({ questionnare: q });
+      const qs = await QuestionModel.find({ questionnaire: q });
       return qs.map((_q, index) => index);
     }
     return [];
@@ -69,14 +69,14 @@ export const quNewName = new TelegrafStatelessQuestion<TelegrafContext>(
       const parts = path.match(qRegex);
       if (parts && parts[1]) {
         const id = parts[1];
-        const q = await getQuestionnare(ctx, +id);
+        const q = await getQuestionnaire(ctx, +id);
         if (q) {
-          const qus = await QuestionModel.find({ questionnare: q });
+          const qus = await QuestionModel.find({ questionnaire: q });
           const qu = new QuestionModel({
             name: answer,
             type: QuestionType.Short,
             isRequired: false,
-            questionnare: q,
+            questionnaire: q,
             sortOrder: qus.length,
           });
           await qu.save();

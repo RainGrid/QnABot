@@ -4,8 +4,8 @@ language: Язык
 language_select: Пожалуйста, выберите язык
 language_selected: <b>Бот</b> теперь говорит по-русски.
 menu: Меню
-questionnares: Вопросники
-questionnares_your: Мои вопросники
+questionnaires: Вопросники
+questionnaires_your: Мои вопросники
 questions: Вопросы
 options: Варианты ответа
 author: Об авторе
@@ -56,7 +56,7 @@ edit_name_req: Введите название
 edit_descr: Редактировать описание
 edit_descr_req: Введите описание
 
-questionnares_attempts: Ваши попытки
+questionnaires_attempts: Ваши попытки
 qanotification: Новый ответ на опросник "${qName}"
 
 add_new: Добавить новый

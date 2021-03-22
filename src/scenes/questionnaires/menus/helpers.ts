@@ -2,16 +2,16 @@ import { DocumentType } from '@typegoose/typegoose';
 import {
   Question,
   QuestionModel,
-  Questionnare,
-  QuestionnareModel,
+  Questionnaire,
+  QuestionnaireModel,
 } from '../../../models';
 import { TelegrafContext } from '../../../types';
 
-export async function getQuestionnare(
+export async function getQuestionnaire(
   ctx: TelegrafContext,
   index?: number,
-): Promise<DocumentType<Questionnare> | null> {
-  const q = await QuestionnareModel.find({ user: ctx.dbuser })
+): Promise<DocumentType<Questionnaire> | null> {
+  const q = await QuestionnaireModel.find({ user: ctx.dbuser })
     .skip(index !== undefined ? index : +ctx.match![1])
     .limit(1);
   if (q.length) {
@@ -25,9 +25,9 @@ export async function getQuestion(
   index?: number,
   qIndex?: number,
 ): Promise<DocumentType<Question> | null> {
-  const q = await getQuestionnare(ctx, qIndex);
+  const q = await getQuestionnaire(ctx, qIndex);
   if (q) {
-    const qs = await QuestionModel.find({ questionnare: q })
+    const qs = await QuestionModel.find({ questionnaire: q })
       .skip(index !== undefined ? index : +ctx.match![2])
       .limit(1);
     if (qs.length) {

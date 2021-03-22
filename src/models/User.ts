@@ -7,13 +7,13 @@ import {
 } from '@typegoose/typegoose';
 import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 import { newUserNotification } from '../utils';
-import { QuestionnareModel } from './Questionnare';
+import { QuestionnaireModel } from './Questionnaire';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface User extends Base {}
 
 async function deleteDependencies(user: User): Promise<void> {
-  await QuestionnareModel.deleteMany({ user });
+  await QuestionnaireModel.deleteMany({ user });
 }
 
 @post<User>('findOneAndRemove', async (user) => {

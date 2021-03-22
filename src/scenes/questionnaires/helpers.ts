@@ -5,11 +5,11 @@ import { actionImport } from './actions';
 export const buttons: Button[] = [
   {
     cmd: 'qtake',
-    cb: enterScene('questionnare_take'),
+    cb: enterScene('questionnaire_take'),
   },
   {
     cmd: 'qcreate',
-    cb: enterScene('questionnare_new'),
+    cb: enterScene('questionnaire_new'),
   },
   {
     cmd: 'qimport',
@@ -22,5 +22,5 @@ export const buttons: Button[] = [
 ];
 
 export const sendMainKeyboard = async (ctx: TelegrafContext): Promise<void> => {
-  await ctx.reply(ctx.i18n.t('questionnares'), getDefaultMarkup(ctx, buttons));
+  await ctx.reply(ctx.i18n.t('questionnaires'), getDefaultMarkup(ctx, buttons));
 };

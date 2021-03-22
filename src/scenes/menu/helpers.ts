@@ -2,7 +2,7 @@ import { Button, TelegrafContext } from '../../types';
 import { enterScene, getDefaultMarkup } from '../../utils';
 
 export const buttons: Button[] = [
-  { cmd: 'questionnares', cb: enterScene('questionnares') },
+  { cmd: 'questionnaires', cb: enterScene('questionnaires') },
   { cmd: 'language', cb: enterScene('language') },
   { cmd: 'help', cb: enterScene('help') },
   { cmd: 'author', cb: enterScene('author') },

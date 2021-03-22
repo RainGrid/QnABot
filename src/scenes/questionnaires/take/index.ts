@@ -6,7 +6,7 @@ import { buttons, sendMainKeyboard } from './helpers';
 import { takeMenuMiddleware } from './menus';
 import { actionHandleAnswer, qaMenuMiddleware } from './menus/qaSingle';
 
-const scene = new Scenes.BaseScene<TelegrafContext>('questionnare_take');
+const scene = new Scenes.BaseScene<TelegrafContext>('questionnaire_take');
 
 scene.enter(async (ctx: TelegrafContext) => {
   await sendMainKeyboard(ctx);

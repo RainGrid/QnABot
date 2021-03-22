@@ -1,4 +1,4 @@
-import { QuestionnareModel } from '../../../models';
+import { QuestionnaireModel } from '../../../models';
 import { TelegrafContext } from '../../../types';
 
 export const actionProcessPayload = async (
@@ -17,7 +17,7 @@ export const actionProcessPayload = async (
     if (ctx.scene.session.data?.step === 'qdescr') {
       const description = ctx.message.text;
       if (description) {
-        const q = new QuestionnareModel({
+        const q = new QuestionnaireModel({
           name: ctx.scene.session.data.name,
           description,
           user: ctx.dbuser,
@@ -25,7 +25,7 @@ export const actionProcessPayload = async (
         await q.save();
 
         await ctx.reply(ctx.i18n.t('qnew_success'));
-        ctx.scene.enter('questionnares');
+        ctx.scene.enter('questionnaires');
         return;
       }
     }

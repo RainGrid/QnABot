@@ -12,6 +12,6 @@ mongoose.set('useCreateIndex', true);
 // Export models
 export * from './Answer';
 export * from './Question';
-export * from './Questionnare';
-export * from './QuestionnareAttempt';
+export * from './Questionnaire';
+export * from './QuestionnaireAttempt';
 export * from './User';
