@@ -77,7 +77,7 @@ export const quNewName = new TelegrafStatelessQuestion<TelegrafContext>(
             type: QuestionType.Short,
             isRequired: false,
             questionnaire: q,
-            sortOrder: qus.length,
+            sortOrder: qus.length ? qus[qus.length - 1].sortOrder + 1 : 0,
           });
           await qu.save();
         }

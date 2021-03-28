@@ -32,7 +32,8 @@ takeMenu.choose(
       const qa = await QuestionnaireAttemptModel.findById(key).populate(
         'questionnaire',
       );
-      if (qa) {
+
+      if (qa?.questionnaire) {
         return (qa.questionnaire as Questionnaire).name;
       }
       return '';

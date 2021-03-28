@@ -28,6 +28,7 @@ export const qaSingleMenu = new MenuTemplate<TelegrafContext>(async (ctx) => {
       }
 
       const qName = (qa.questionnaire as Questionnaire).name;
+      const qDescr = (qa.questionnaire as Questionnaire).description;
 
       if (!data.question) {
         const ans = await AnswerModel.find({ attempt: qa }).populate(
@@ -51,9 +52,9 @@ export const qaSingleMenu = new MenuTemplate<TelegrafContext>(async (ctx) => {
       }
 
       if (data.question) {
-        const response = `${qName}\n\n${`${data.question.sortOrder + 1}. ${
-          data.question.name
-        }`}\n${data.question.description || ''}`;
+        const response = `${qName}${qDescr ? '\n' + qDescr : ''}\n\n${`${
+          data.question.sortOrder + 1
+        }. ${data.question.name}`}\n${data.question.description || ''}`;
         return response;
       } else {
         qa.isFinished = true;
