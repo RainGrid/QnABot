@@ -34,7 +34,7 @@ export const actionProcessPayload = async (
     if (ctx.scene.session.data?.step === 'gf_link') {
       const url = ctx.message.text;
       if (
-        /https:\/\/docs\.google\.com\/forms\/d\/e\/[a-zA-Z0-9_=?-]+\/viewform/.test(
+        /https:\/\/docs\.google\.com\/forms\/d\/(e\/)?[a-zA-Z0-9_=?-]+\/viewform/.test(
           url,
         )
       ) {

@@ -21,7 +21,7 @@ about_author: Volokh Y @raingrid
 
 qimport: Import Google Form
 qimport_link: Enter the Form url
-qimport_link_wrong: Wrong url, please check tha the form in view mode
+qimport_link_wrong: Wrong url, please check that the form in view mode
 qimport_error: Import error
 qimport_success: Import is successfully finished
 
